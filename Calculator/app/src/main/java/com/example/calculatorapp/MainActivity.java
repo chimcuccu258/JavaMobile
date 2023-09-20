@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private TextInputEditText weight;
@@ -32,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void calculateBMI() {
-        String weightText = weight.getText().toString();
-        String heightText = height.getText().toString();
+        String weightText = Objects.requireNonNull(weight.getText()).toString();
+        String heightText = Objects.requireNonNull(height.getText()).toString();
 
         if (!weightText.isEmpty() && !heightText.isEmpty()) {
             double weight = Double.parseDouble(weightText);
@@ -44,16 +47,18 @@ public class MainActivity extends AppCompatActivity {
             String bmiResult;
             if (bmi < 18.5) {
                 bmiResult = getString(R.string.underweight);
-            } else if (bmi >= 18.5 && bmi < 24.9) {
+            } else if (bmi < 24.9) {
                 bmiResult = getString(R.string.normal_weight);
-            } else if (bmi >= 25.0 && bmi < 29.9) {
+            } else if (bmi < 29.9) {
                 bmiResult = getString(R.string.overweight);
             } else {
                 bmiResult = getString(R.string.obese);
             }
 
+            result.setTextColor(ContextCompat.getColor(this, R.color.black));
             result.setText(getString(R.string.bmi_result, bmi) + "\n" + bmiResult);
         } else {
+            result.setTextColor(ContextCompat.getColor(this, R.color.red));
             result.setText(R.string.empty_fields_error);
         }
     }

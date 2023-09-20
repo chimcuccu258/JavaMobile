@@ -5,4 +5,8 @@
     <string name="height">Enter Height (cm)</string>
     <string name="bmi_result">Your BMI: %.2f</string>
     <string name="empty_fields_error">Please enter weight and height.</string>
+    <string name="underweight">Underweight</string>
+    <string name="normal_weight">Normal Weight</string>
+    <string name="overweight">Overweight</string>
+    <string name="obese">Obese</string>
 </resources>

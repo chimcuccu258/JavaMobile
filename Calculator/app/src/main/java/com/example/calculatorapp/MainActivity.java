@@ -41,8 +41,18 @@ public class MainActivity extends AppCompatActivity {
 
             double bmi = weight / (height * height);
 
-            String bmiResult = getString(R.string.bmi_result, bmi);
-            result.setText(bmiResult);
+            String bmiResult;
+            if (bmi < 18.5) {
+                bmiResult = getString(R.string.underweight);
+            } else if (bmi >= 18.5 && bmi < 24.9) {
+                bmiResult = getString(R.string.normal_weight);
+            } else if (bmi >= 25.0 && bmi < 29.9) {
+                bmiResult = getString(R.string.overweight);
+            } else {
+                bmiResult = getString(R.string.obese);
+            }
+
+            result.setText(getString(R.string.bmi_result, bmi) + "\n" + bmiResult);
         } else {
             result.setText(R.string.empty_fields_error);
         }

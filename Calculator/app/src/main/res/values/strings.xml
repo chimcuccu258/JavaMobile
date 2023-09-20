@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">BMI CALCULATOR</string>
+    <string name="cal">Calculate</string>
+    <string name="weight">Enter Weight (kg)</string>
+    <string name="height">Enter Height (cm)</string>
+    <string name="bmi_result">Your BMI: %.2f</string>
+    <string name="empty_fields_error">Please enter weight and height.</string>
+</resources>

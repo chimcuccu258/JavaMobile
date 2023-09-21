@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.core.content.ContextCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -30,6 +32,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 calculateBMI();
+            }
+        });
+
+        Button resetBtn = findViewById(R.id.resetButton);
+        resetBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                weight.setText("");
+                height.setText("");
+                result.setText("");
+
+                Toast.makeText(MainActivity.this, "Cleared", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -58,8 +72,7 @@ public class MainActivity extends AppCompatActivity {
             result.setTextColor(ContextCompat.getColor(this, R.color.black));
             result.setText(getString(R.string.bmi_result, bmi) + "\n" + bmiResult);
         } else {
-            result.setTextColor(ContextCompat.getColor(this, R.color.red));
-            result.setText(R.string.empty_fields_error);
+            Toast.makeText(this, R.string.empty_fields_error, Toast.LENGTH_SHORT).show();
         }
     }
 }

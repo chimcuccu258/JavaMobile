@@ -2,19 +2,15 @@ import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 
-// void main() {
-//   runApp(const HomeScreen());
-// }
-
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class OrderScreen extends StatefulWidget {
+  const OrderScreen({Key? key}) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _OrderScreenState createState() => _OrderScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
+class _OrderScreenState extends State<OrderScreen> {
+  int _currentIndex = 1;
 
   void _handleNavigation(int index) {
     if (index != _currentIndex) {
@@ -23,9 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       switch (index) {
         case 0:
+          Navigator.of(context).pushReplacementNamed('/home');
           break;
         case 1:
-          Navigator.pushNamed(context, '/order');
           break;
       }
     }

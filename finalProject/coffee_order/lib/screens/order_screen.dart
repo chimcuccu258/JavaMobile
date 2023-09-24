@@ -98,7 +98,7 @@ class _OrderScreenState extends State<OrderScreen> {
       ),
       body: const Center(
         child: Text(
-          'Home Screen Content',
+          'Order Screen Content',
           style: TextStyle(fontSize: 20),
         ),
       ),

@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
-class OtherScreen extends StatelessWidget {
+class OtherScreen extends StatefulWidget {
   const OtherScreen({Key? key}) : super(key: key);
 
   @override
+  _OtherScreenState createState() => _OtherScreenState();
+}
+
+class _OtherScreenState extends State<OtherScreen> {
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-      ),
+    return const Scaffold(
       body: Center(
         child: Text(
-          'Home Screen Content',
+          'Order Screen Content',
           style: TextStyle(fontSize: 20),
         ),
       ),

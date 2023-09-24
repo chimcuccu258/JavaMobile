@@ -5,6 +5,7 @@ import './screens/order_screen.dart';
 import './screens/delivery_screen.dart';
 import './screens/notice_screen.dart';
 import './screens/other_screen.dart';
+import './screens/bottom_navigation.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,14 +18,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),
-        '/home': (context) => const HomeScreen(),
-        '/order': (context) => const OrderScreen(),
-        // '/delivery': (context) => const DeliveryScreen(),
-        // '/notice': (context) => const NoticeScreen(),
-        // '/other': (context) => const OtherScreen(),
+        '/navigation': (context) => const BottomNavigation(),
       },
     );
   }

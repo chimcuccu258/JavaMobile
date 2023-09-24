@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 import './screens/splash_screen.dart';
-import './screens/home_screen.dart';
-import './screens/order_screen.dart';
-import './screens/delivery_screen.dart';
-import './screens/notice_screen.dart';
-import './screens/other_screen.dart';
 import './screens/bottom_navigation.dart';
 
 void main() {
@@ -18,7 +13,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),

@@ -7,6 +7,13 @@ import 'package:coffee_order/screens/other_screen.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 
+void main() {
+  runApp(const MaterialApp(
+    home: BottomNavigation(),
+  ));
+}
+
+
 class BottomNavigation extends StatefulWidget {
   const BottomNavigation({Key? key}) : super(key: key);
 
@@ -24,7 +31,9 @@ class _BottomNavigationState extends State<BottomNavigation> {
     const OtherScreen(),
   ];
 
-  void _onTap(int index) {
+  final List<Widget> _screens = _widgetOption; 
+
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
@@ -32,73 +41,158 @@ class _BottomNavigationState extends State<BottomNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: _widgetOption[_selectedIndex],
-      ),
-      bottomNavigationBar: CurvedNavigationBar(
-        onTap: _onTap,
-        color: Colors.brown,
-        backgroundColor: Colors.white,
-        buttonBackgroundColor: Colors.brown,
-        animationDuration: const Duration(milliseconds: 180),
-        items: const [
-          CurvedNavigationBarItem(
-            child: Icon(
-              Icons.home_outlined,
-              color: Colors.white,
+    // return Scaffold(
+    //   body: Center(
+    //     child: _widgetOption[_selectedIndex],
+    //   ),
+    //   bottomNavigationBar: CurvedNavigationBar(
+    //     onTap: _onTap,
+    //     color: Colors.brown,
+    //     backgroundColor: Colors.white,
+    //     buttonBackgroundColor: Colors.brown,
+    //     animationDuration: const Duration(milliseconds: 180),
+    //     items: const [
+    //       CurvedNavigationBarItem(
+    //         child: Icon(
+    //           Icons.home_outlined,
+    //           color: Colors.white,
+    //         ),
+    //         label: 'Trang chủ',
+    //         labelStyle: TextStyle(
+    //           fontSize: 13,
+    //           color: Colors.white,
+    //         ),
+    //       ),
+    //       CurvedNavigationBarItem(
+    //         child: Icon(
+    //           Icons.shopping_bag_outlined,
+    //           color: Colors.white,
+    //         ),
+    //         label: 'Đặt hàng',
+    //         labelStyle: TextStyle(
+    //           fontSize: 13,
+    //           color: Colors.white,
+    //         ),
+    //       ),
+    //       CurvedNavigationBarItem(
+    //         child: Icon(
+    //           Icons.delivery_dining_outlined,
+    //           color: Colors.white,
+    //         ),
+    //         label: 'Giao hàng',
+    //         labelStyle: TextStyle(
+    //           fontSize: 13,
+    //           color: Colors.white,
+    //         ),
+    //       ),
+    //       CurvedNavigationBarItem(
+    //         child: Icon(
+    //           Icons.notifications_outlined,
+    //           color: Colors.white,
+    //         ),
+    //         label: 'Thông báo',
+    //         labelStyle: TextStyle(
+    //           fontSize: 13,
+    //           color: Colors.white,
+    //         ),
+    //       ),
+    //       CurvedNavigationBarItem(
+    //         child: Icon(
+    //           Icons.menu,
+    //           color: Colors.white,
+    //         ),
+    //         label: 'Khác',
+    //         labelStyle: TextStyle(
+    //           fontSize: 13,
+    //           color: Colors.white,
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: Stack(
+          children: [
+            Navigator(
+              onGenerateRoute: (routeSettings) {
+                return MaterialPageRoute(
+                  builder: (context) => _screens[_selectedIndex],
+                );
+              },
             ),
-            label: 'Trang chủ',
-            labelStyle: TextStyle(
-              fontSize: 13,
-              color: Colors.white,
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: CurvedNavigationBar(
+                onTap: _onItemTapped,
+                color: Colors.brown,
+                backgroundColor: Colors.white,
+                buttonBackgroundColor: Colors.brown,
+                animationDuration: const Duration(milliseconds: 180),
+                items: const [
+                  CurvedNavigationBarItem(
+                    child: Icon(
+                      Icons.home_outlined,
+                      color: Colors.white,
+                    ),
+                    label: 'Trang chủ',
+                    labelStyle: TextStyle(
+                      fontSize: 13,
+                      color: Colors.white,
+                    ),
+                  ),
+                  CurvedNavigationBarItem(
+                    child: Icon(
+                      Icons.shopping_bag_outlined,
+                      color: Colors.white,
+                    ),
+                    label: 'Đặt hàng',
+                    labelStyle: TextStyle(
+                      fontSize: 13,
+                      color: Colors.white,
+                    ),
+                  ),
+                  CurvedNavigationBarItem(
+                    child: Icon(
+                      Icons.delivery_dining_outlined,
+                      color: Colors.white,
+                    ),
+                    label: 'Giao hàng',
+                    labelStyle: TextStyle(
+                      fontSize: 13,
+                      color: Colors.white,
+                    ),
+                  ),
+                  CurvedNavigationBarItem(
+                    child: Icon(
+                      Icons.notifications_outlined,
+                      color: Colors.white,
+                    ),
+                    label: 'Thông báo',
+                    labelStyle: TextStyle(
+                      fontSize: 13,
+                      color: Colors.white,
+                    ),
+                  ),
+                  CurvedNavigationBarItem(
+                    child: Icon(
+                      Icons.menu,
+                      color: Colors.white,
+                    ),
+                    label: 'Khác',
+                    labelStyle: TextStyle(
+                      fontSize: 13,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(
-              Icons.shopping_bag_outlined,
-              color: Colors.white,
-            ),
-            label: 'Đặt hàng',
-            labelStyle: TextStyle(
-              fontSize: 13,
-              color: Colors.white,
-            ),
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(
-              Icons.delivery_dining_outlined,
-              color: Colors.white,
-            ),
-            label: 'Giao hàng',
-            labelStyle: TextStyle(
-              fontSize: 13,
-              color: Colors.white,
-            ),
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(
-              Icons.notifications_outlined,
-              color: Colors.white,
-            ),
-            label: 'Thông báo',
-            labelStyle: TextStyle(
-              fontSize: 13,
-              color: Colors.white,
-            ),
-          ),
-          CurvedNavigationBarItem(
-            child: Icon(
-              Icons.menu,
-              color: Colors.white,
-            ),
-            label: 'Khác',
-            labelStyle: TextStyle(
-              fontSize: 13,
-              color: Colors.white,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:coffee_order/widgets/WeatherIcon.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,11 +13,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          'Home Screen Content',
-          style: TextStyle(fontSize: 20),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Row(
+          children: [
+            IconButton(
+              icon: const WeatherIcon(city: 'Nha Trang'),
+              onPressed: () {},
+            ),
+            const Text(
+              "Chào bạn",
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -129,7 +129,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
               child: CurvedNavigationBar(
                 onTap: _onItemTapped,
                 color: Colors.brown,
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.transparent,
                 buttonBackgroundColor: Colors.brown,
                 animationDuration: const Duration(milliseconds: 180),
                 items: const [

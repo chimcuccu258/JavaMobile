@@ -27,7 +27,7 @@ class _WeatherIconState extends State<WeatherIcon> {
       setState(() {
         weatherCondition = weatherData['weather'][0]['main'];
       });
-      print('Thời tiết hiện tại: $weatherCondition');
+      print('Weather: $weatherCondition');
     } catch (e) {
       print(e);
     }
@@ -52,13 +52,16 @@ class _WeatherIconState extends State<WeatherIcon> {
 
   Icon getWeatherIcon() {
     Color iconColor;
+    Color shadowColor;
 
     if (weatherCondition == null) {
       iconColor = Colors.black;
+      shadowColor = Colors.transparent;
     } else {
       switch (weatherCondition) {
         case 'Clear':
           iconColor = Colors.yellow;
+          shadowColor = Colors.yellow.withOpacity(0.5);
           return Icon(Icons.wb_sunny, color: iconColor);
         case 'Clouds':
           iconColor = const Color.fromARGB(255, 209, 209, 209);
@@ -71,7 +74,6 @@ class _WeatherIconState extends State<WeatherIcon> {
           return Icon(Icons.cloud, color: iconColor);
       }
     }
-
     return Icon(Icons.cloud, color: iconColor);
   }
 

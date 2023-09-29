@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/navigation',
+      initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),
         '/navigation': (context) => const BottomNavigation(),

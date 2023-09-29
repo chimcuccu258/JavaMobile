@@ -10,7 +10,11 @@ class DeliveryScreen extends StatefulWidget {
 class _DeliveryScreenState extends State<DeliveryScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text('Giao hàng', style: TextStyle(color: Colors.black)),
+      ),
       body: Center(
         child: Text(
           'Delivery Screen Content',

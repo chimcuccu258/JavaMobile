@@ -1,3 +1,4 @@
+import 'package:coffee_order/screens/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:coffee_order/widgets/items_widget.dart';
 
@@ -14,7 +15,7 @@ class _OrderScreenState extends State<OrderScreen>
 
   @override
   void initState() {
-    _tabController = TabController(length: 4, vsync: this, initialIndex: 0);
+    _tabController = TabController(length: 3, vsync: this, initialIndex: 0);
     _tabController.addListener(_handleTabSelection);
     super.initState();
   }
@@ -79,9 +80,6 @@ class _OrderScreenState extends State<OrderScreen>
             labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             labelPadding: EdgeInsets.symmetric(horizontal: 16),
             tabs: [
-              Tab(
-                text: "Coffee",
-              ),
               Tab(
                 text: "Coffee",
               ),

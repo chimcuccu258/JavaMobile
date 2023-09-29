@@ -10,7 +10,11 @@ class NoticeScreen extends StatefulWidget {
 class _NoticeScreenState extends State<NoticeScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text('Thông báo', style: TextStyle(color: Colors.black)),
+      ),
       body: Center(
         child: Text(
           'Notice Screen Content',

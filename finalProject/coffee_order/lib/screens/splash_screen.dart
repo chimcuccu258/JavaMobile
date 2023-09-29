@@ -20,16 +20,20 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.brown,
-        child: const Center(
-          child: Text(
-            'Brown Coffee',
-            style: TextStyle(
-              fontSize: 40,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+        width: double.infinity,
+        height: double.infinity,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
+              'images/splash.jpg',
+              fit: BoxFit.cover,
             ),
-          ),
+            Positioned(
+              child: Image.asset('images/WHITE_TRANS_LOGO.webp',
+                  width: 150, height: 150),
+            ),
+          ],
         ),
       ),
     );

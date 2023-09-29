@@ -42,28 +42,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    "Cửa hàng",
+                    "Ưu đãi",
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.black,
                     ),
                   ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Xem tất cả",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
+                  
                 ],
               ),
             ),
           ],
-        ), 
-      ), 
+        ),
+      ),
     );
   }
 }

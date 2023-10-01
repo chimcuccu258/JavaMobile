@@ -74,24 +74,9 @@ class _HomeScreenState extends State<HomeScreen> {
               width: MediaQuery.of(context).size.width,
               child: Chewie(controller: _chewieController)),
           SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
-            child: Column(
-              children: [
-                SizedBox(height: 350,),
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  color: Colors.brown,
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Chào mừng bạn đến với Coffee Order",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                    ),
-                  ),
-                )
-              ],
+            child: Wrap(
+              spacing: 10,
+              runSpacing: 10,
             ),
           )
         ],

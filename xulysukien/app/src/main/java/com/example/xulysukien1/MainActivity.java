@@ -33,6 +33,16 @@ public class MainActivity extends AppCompatActivity {
                 username = String.valueOf(editTextUsername.getText());
                 password = String.valueOf(editTextPassword.getText());
 
+                if (TextUtils.isEmpty(username)) {
+                    Toast.makeText(MainActivity.this, "Enter username", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (TextUtils.isEmpty(password)) {
+                    Toast.makeText(MainActivity.this,"Enter password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (username.equals("63clc1") && password.equals("123")) {
                     Toast.makeText(MainActivity.this, "Login successful", Toast.LENGTH_LONG).show();
                 }

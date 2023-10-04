@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">XuLySuKien1</string>
+    <string name="click_me">Click me</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+</resources>

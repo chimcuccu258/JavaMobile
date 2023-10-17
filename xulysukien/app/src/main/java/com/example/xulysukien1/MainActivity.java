@@ -19,13 +19,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWidget();
     }
-
-    public void Login(View view) {
+    void getWidget() {
         editTextUsername = findViewById(R.id.username);
         editTextPassword = findViewById(R.id.password);
         loginBtn = findViewById(R.id.loginBtn);
+    }
 
+    public void Login(View view) {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -13,7 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 export default function OnboardingScreen() {
   const navigation = useNavigation();
   const handleDone = () => {
-    navigation.navigate('Home');
+    navigation.navigate('Login');
   };
 
   const doneBtn = ({...props}) => (
@@ -29,7 +29,7 @@ export default function OnboardingScreen() {
         onSkip={handleDone}
         bottomBarHighlight={false}
         DoneButtonComponent={doneBtn}
-        containerStyles={{padding: 15}}
+        containerStyles={{padding: 20}}
         pages={[
           {
             backgroundColor: '#fff',

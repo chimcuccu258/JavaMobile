@@ -2,7 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
+import IndexScreen from '../screens/IndexScreen';
 import {getItem} from '../utils/asyncStorage';
+import Authentication from '../screens/Authentication';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,14 +38,19 @@ export default function MainNavigation() {
         />
 
         <Stack.Screen
-          name="Home"
+          name="Login"
           options={{headerShown: false}}
-          component={HomeScreen}
+          component={IndexScreen}
+        />
+
+        <Stack.Screen
+          name="Authentication"
+          component={Authentication}
         />
       </Stack.Navigator>
     );
   } else {
-    return (
+    return (  
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Onboarding"
@@ -55,6 +62,11 @@ export default function MainNavigation() {
           name="Home"
           options={{headerShown: false}}
           component={HomeScreen}
+        />
+
+        <Stack.Screen
+          name='Authentication'
+          component={Authentication}
         />
       </Stack.Navigator>
     );

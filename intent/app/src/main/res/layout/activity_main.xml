@@ -51,6 +51,8 @@
         android:layout_marginTop="52dp"
         android:ems="10"
         android:inputType="text"
+        android:minHeight="48dp"
+        android:text="Name"
         app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -72,6 +74,8 @@
         android:layout_marginTop="52dp"
         android:ems="10"
         android:inputType="text"
+        android:text="Age"
+        android:minHeight="48dp"
         app:layout_constraintStart_toEndOf="@+id/textView6"
         app:layout_constraintTop_toBottomOf="@+id/editName" />
 

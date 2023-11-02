@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.minhngane.weather_app"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.minhngane.weather_app"

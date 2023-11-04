@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "vn.devminhnga.globeexplorer"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "vn.devminhnga.globeexplorer"
@@ -29,7 +29,6 @@ android {
 }
 
 dependencies {
-
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")

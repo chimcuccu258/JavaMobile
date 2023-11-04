@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,19 +8,48 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <View
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-
-    </View>
+        android:layout_weight="1"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_nav_menu" />
 
-
 </LinearLayout>
+
+
+<!--<FrameLayout-->
+<!--android:id="@+id/frame_container"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="match_parent"-->
+<!--android:layout_above="@+id/bottom_navigation"/>-->
+
+<!--<fragment-->
+<!--android:id="@+id/menu_home"-->
+<!--android:name="vn.devminhnga.globeexplorer.HomeFragment"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="match_parent"/>-->
+
+<!--<fragment-->
+<!--android:id="@+id/menu_dashboard"-->
+<!--android:name="vn.devminhnga.globeexplorer.DashboardFragment"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="match_parent"/>-->
+
+<!--<fragment-->
+<!--android:id="@+id/menu_notifications"-->
+<!--android:name="vn.devminhnga.globeexplorer.NotificationsFragment"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="match_parent"/>-->
+
+<!--<fragment-->
+<!--android:id="@+id/menu_other"-->
+<!--android:name="vn.devminhnga.globeexplorer.OtherFragment"-->
+<!--android:layout_width="match_parent"-->
+<!--android:layout_height="match_parent"/>-->

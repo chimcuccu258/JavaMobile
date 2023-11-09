@@ -28,8 +28,8 @@ public class CountryAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-//        return lstdataSource.size();
-        return lstdataSource != null ? lstdataSource.size() : 0;
+        return lstdataSource.size();
+//        return lstdataSource != null ? lstdataSource.size() : 0;
     }
 
     @Override
@@ -56,13 +56,13 @@ public class CountryAdapter extends BaseAdapter {
             itemViewHolder = (countryViewHolder) view.getTag();
         }
 
-//        Country countryItem = lstdataSource.get(i);
-//        itemViewHolder.countryNameView.setText(countryItem.getCountryName());
+        Country countryItem = lstdataSource.get(i);
+        itemViewHolder.countryNameView.setText(countryItem.getCountryName());
 
-        if (lstdataSource != null) {
-            Country countryItem = lstdataSource.get(i);
-            itemViewHolder.countryNameView.setText(countryItem.getCountryName());
-        }
+//        if (lstdataSource != null) {
+//            Country countryItem = lstdataSource.get(i);
+//            itemViewHolder.countryNameView.setText(countryItem.getCountryName());
+//        }
 
         return view;
     }

@@ -10,14 +10,16 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import auth from '@react-native-firebase/auth';
 
-const Authentication = () => {
+const Authentication = ({route}) => {
+  const navigation = useNavigation();
+
   let textInput = useRef(null);
   let clockCall = null;
 
-  const navigation = useNavigation();
   const lengthInput = 6;
-  const defaultCountdown = 5;
+  const defaultCountdown = 30;
   const [internalVal, setInternalVal] = useState('');
   const [countdown, setCountdown] = useState(defaultCountdown);
   const [enableResend, setEnableResend] = useState(false);
@@ -25,7 +27,6 @@ const Authentication = () => {
   useEffect(() => {
     clockCall = setInterval(() => {
       decrementClock();
-      8;
     }, 1000);
     return () => {
       clearInterval(clockCall);
@@ -55,8 +56,8 @@ const Authentication = () => {
       setCountdown(defaultCountdown);
       setEnableResend(false);
       clearInterval(clockCall);
-      clockCall = setInternalVal(() => {
-        decrementClock(0);
+      clockCall = setInterval(() => {
+        decrementClock();
       }, 1000);
     }
   };

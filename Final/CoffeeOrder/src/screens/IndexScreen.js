@@ -16,6 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 const IndexScreen = () => {
   const navigation = useNavigation();
   const [phone, setPhone] = useState('');
+  const [isPhoneTyped, setIsPhoneTyped] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -47,11 +48,18 @@ const IndexScreen = () => {
             onChangeFormattedText={text => {
               setPhone(text);
             }}
+            onChangeText={text => {
+              setIsPhoneTyped(text.length > 0);
+            }}
           />
         </View>
         <TouchableOpacity
-          style={styles.btnLogin}
-          onPress={() => navigation.navigate('Authentication')}
+          disabled={!isPhoneTyped}
+          style={[
+            styles.btnLogin,
+            {backgroundColor: isPhoneTyped ? colors.mainColor : colors.lightGray},
+          ]}
+          onPress={() => navigation.navigate('Authentication', {phone: phone})}
           activeOpacity={0.5}>
           <Text style={{color: colors.white, fontSize: 14, fontWeight: 'bold'}}>
             Login
@@ -93,7 +101,7 @@ const IndexScreen = () => {
               source={require('../assets/images/google3.png')}
               style={styles.appleImage}
             />
-            <Text style={styles.btnText}>Tiếp tục bằng Facebook</Text>
+            <Text style={styles.btnText}>Tiếp tục bằng Google</Text>
           </View>
         </TouchableOpacity>
       </ImageBackground>

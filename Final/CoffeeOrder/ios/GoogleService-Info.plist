@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyC4KIUtpVRnP9vk6KK2d0YPCeAnb7kopPg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>13872469257</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>org.reactjs.native.minhnga.CoffeeOrder</string>
+	<key>PROJECT_ID</key>
+	<string>coffeeorder-b495e</string>
+	<key>STORAGE_BUCKET</key>
+	<string>coffeeorder-b495e.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:13872469257:ios:4dc606d7d321dfce696fd8</string>
+</dict>
+</plist>

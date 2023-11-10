@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   phoneInput: {
-    width: windowWidth * 0.8,
+    width: windowWidth * 0.9,
     height: windowHeight * 0.06,
     borderRadius: 30,
     backgroundColor: colors.white,

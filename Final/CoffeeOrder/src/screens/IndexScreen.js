@@ -51,14 +51,11 @@ const IndexScreen = () => {
         </View>
         <TouchableOpacity
           style={styles.btnLogin}
-          // onPress={() => navigation.navigate('Authentication')}
-          activeOpacity={0.5}>
-          <Text style={{color: colors.white, fontSize: 14}}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
           onPress={() => navigation.navigate('Authentication')}
-          style={{marginTop: 20}}>
-          <Text style={{color: colors.white}}>Authentication</Text>
+          activeOpacity={0.5}>
+          <Text style={{color: colors.white, fontSize: 14, fontWeight: 'bold'}}>
+            Login
+          </Text>
         </TouchableOpacity>
         <View
           style={{
@@ -72,7 +69,7 @@ const IndexScreen = () => {
           <View style={styles.line} />
           <View style={styles.spacer} />
         </View>
-        <TouchableOpacity style={styles.btn1}>
+        <TouchableOpacity style={styles.btn1} activeOpacity={0.5}>
           <View style={styles.btnContent}>
             <Image
               source={require('../assets/images/apple3.png')}
@@ -81,7 +78,7 @@ const IndexScreen = () => {
             <Text style={styles.btnText}>Tiếp tục bằng Apple</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn2}>
+        <TouchableOpacity style={styles.btn2} activeOpacity={0.5}>
           <View style={styles.btnContent}>
             <Image
               source={require('../assets/images/facebook(@3×).png')}
@@ -90,7 +87,7 @@ const IndexScreen = () => {
             <Text style={styles.btnText}>Tiếp tục bằng Facebook</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btn3}>
+        <TouchableOpacity style={styles.btn3} activeOpacity={0.5}>
           <View style={styles.btnContent}>
             <Image
               source={require('../assets/images/google3.png')}

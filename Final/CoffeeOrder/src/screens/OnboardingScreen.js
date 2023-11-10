@@ -9,6 +9,7 @@ import React from 'react';
 import Onboarding from 'react-native-onboarding-swiper';
 import LottieView from 'lottie-react-native';
 import {useNavigation} from '@react-navigation/native';
+import { windowHeight, windowWidth } from '../utils/dimession';
 
 export default function OnboardingScreen() {
   const navigation = useNavigation();
@@ -89,8 +90,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   lottie: {
-    width: 300,
-    height: 400,
+    width: windowWidth - 40,
+    height: windowHeight / 2,
   },
   doneBtn: {
     padding: 20,

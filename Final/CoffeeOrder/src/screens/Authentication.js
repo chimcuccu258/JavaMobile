@@ -24,7 +24,8 @@ const Authentication = () => {
 
   useEffect(() => {
     clockCall = setInterval(() => {
-      decrementClock();8
+      decrementClock();
+      8;
     }, 1000);
     return () => {
       clearInterval(clockCall);

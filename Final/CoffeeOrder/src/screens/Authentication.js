@@ -10,7 +10,6 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import auth from '@react-native-firebase/auth';
 
 const Authentication = ({route}) => {
   const navigation = useNavigation();

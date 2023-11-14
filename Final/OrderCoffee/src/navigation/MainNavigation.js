@@ -24,51 +24,45 @@ export default function MainNavigation() {
     }
   };
 
-  if (showOnboarding == null) {
+  if (showOnboarding === null) {
     return null;
   }
 
-  if (showOnboarding) {
-    return (
-      <Stack.Navigator initialRouteName="Onboarding">
-        <Stack.Screen
-          name="Onboarding"
-          options={{headerShown: false}}
-          component={OnboardingScreen}
-        />
+  return (
+    <Stack.Navigator
+      initialRouteName={showOnboarding ? 'HomeScreen' : 'HomeScreen'}>
+      {showOnboarding && (
+        <>
+          <Stack.Screen
+            name="Onboarding"
+            options={{headerShown: false}}
+            component={OnboardingScreen}
+          />
+          <Stack.Screen
+            name="IndexScreen"
+            options={{headerShown: false}}
+            component={IndexScreen}
+          />
+        </>
+      )}
 
-        <Stack.Screen
-          name="Login"
-          options={{headerShown: false}}
-          component={IndexScreen}
-        />
+      <Stack.Screen
+        name="HomeScreen"
+        options={{headerShown: false}}
+        component={HomeScreen}
+      />
 
-        <Stack.Screen
-          name="Authentication"
-          component={Authentication}
-        />
-      </Stack.Navigator>
-    );
-  } else {
-    return (  
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen
-          name="Onboarding"
-          options={{headerShown: false}}
-          component={OnboardingScreen}
-        />
-
-        <Stack.Screen
-          name="Home"
-          options={{headerShown: false}}
-          component={HomeScreen}
-        />
-
-        <Stack.Screen
-          name='Authentication'
-          component={Authentication}
-        />
-      </Stack.Navigator>
-    );
-  }
+      <Stack.Screen
+        name="Authentication"
+        options={{
+          headerShown: true,
+          title: 'Authentication',
+          headerBackTitle: false,
+          headerBackTitleVisible: false,
+          headerLeft: null,
+        }}
+        component={Authentication}
+      />
+    </Stack.Navigator>
+  );
 }

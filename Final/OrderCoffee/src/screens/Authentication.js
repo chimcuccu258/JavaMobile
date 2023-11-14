@@ -1,3 +1,9 @@
+import {LogBox} from 'react-native';
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
+
 import {
   View,
   Text,
@@ -11,8 +17,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const Authentication = ({route}) => {
-  const navigation = useNavigation();
+const Authentication = ({route, navigation}) => {
+  const {phone, confirmationResult} = route.params;
 
   let textInput = useRef(null);
   let clockCall = null;
@@ -22,7 +28,18 @@ const Authentication = ({route}) => {
   const [internalVal, setInternalVal] = useState('');
   const [countdown, setCountdown] = useState(defaultCountdown);
   const [enableResend, setEnableResend] = useState(false);
-  const {phone} = route.params;
+
+  const confirmCode = async otpValue => {
+    try {
+      await confirmationResult.confirm(otpValue);
+      console.log('sucessfully');
+
+      navigation.navigate('HomeScreen');
+    } catch (error) {
+      console.log('Invalid code.');
+      console.log(otpValue);
+    }
+  };
 
   useEffect(() => {
     clockCall = setInterval(() => {
@@ -47,6 +64,7 @@ const Authentication = ({route}) => {
     setInternalVal(val);
     if (val.length === lengthInput) {
       console.log(phone);
+      confirmCode(val);
     }
   };
 

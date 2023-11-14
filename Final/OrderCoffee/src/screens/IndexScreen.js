@@ -12,11 +12,26 @@ import PhoneInput from 'react-native-phone-number-input';
 import {colors} from '../assets/colors';
 import {windowHeight, windowWidth} from '../utils/dimession';
 import {useNavigation} from '@react-navigation/native';
+import auth from '@react-native-firebase/auth';
 
-const IndexScreen = () => {
+const IndexScreen = ({props}) => {
   const navigation = useNavigation();
   const [phone, setPhone] = useState('');
   const [isPhoneTyped, setIsPhoneTyped] = useState(false);
+  const [confirm, setConfirmation] = useState(null);
+
+  const signInWithPhoneNumber = async phone => {
+    try {
+      const confirmation = await auth().signInWithPhoneNumber(phone);
+      setConfirmation(confirmation);
+      navigation.navigate('Authentication', {
+        phone,
+        confirmationResult: confirmation,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -57,9 +72,13 @@ const IndexScreen = () => {
           disabled={!isPhoneTyped}
           style={[
             styles.btnLogin,
-            {backgroundColor: isPhoneTyped ? colors.mainColor : colors.lightGray},
+            {
+              backgroundColor: isPhoneTyped
+                ? colors.mainColor
+                : colors.lightGray,
+            },
           ]}
-          onPress={() => navigation.navigate('Authentication', {phone: phone})}
+          onPress={() => signInWithPhoneNumber(phone)}
           activeOpacity={0.5}>
           <Text style={{color: colors.white, fontSize: 14, fontWeight: 'bold'}}>
             Login

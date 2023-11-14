@@ -13,7 +13,7 @@ import { windowHeight, windowWidth } from '../utils/dimession';
 export default function OnboardingScreen() {
   const navigation = useNavigation();
   const handleDone = () => {
-    navigation.navigate('Login');
+    navigation.navigate('IndexScreen');
   };
 
   const doneBtn = ({...props}) => (

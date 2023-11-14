@@ -5,6 +5,7 @@ import OnboardingScreen from '../screens/OnboardingScreen';
 import IndexScreen from '../screens/IndexScreen';
 import {getItem} from '../utils/asyncStorage';
 import Authentication from '../screens/Authentication';
+import TabControl from '../screens/TabControl';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,7 +31,7 @@ export default function MainNavigation() {
 
   return (
     <Stack.Navigator
-      initialRouteName={showOnboarding ? 'HomeScreen' : 'HomeScreen'}>
+      initialRouteName={showOnboarding ? 'TabControl' : 'TabControl'}>
       {showOnboarding && (
         <>
           <Stack.Screen
@@ -62,6 +63,12 @@ export default function MainNavigation() {
           headerLeft: null,
         }}
         component={Authentication}
+      />
+
+      <Stack.Screen
+        name="TabControl"
+        options={{headerShown: false}}
+        component={TabControl}
       />
     </Stack.Navigator>
   );

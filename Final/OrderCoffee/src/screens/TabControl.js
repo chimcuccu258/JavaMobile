@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import React, {useState} from 'react';
 import {windowHeight} from '../utils/dimession';
 import QRScan from '../components/QRScan';
@@ -45,7 +45,7 @@ const TabControl = () => {
       <View style={styles.qr}>
         <QRScan />
       </View>
-      <BottomTabs onTabPress={handleTabPress} />
+      <BottomTabs selectedTab={selectedTab} onTabPress={handleTabPress} />
     </View>
   );
 };
@@ -60,8 +60,8 @@ const styles = StyleSheet.create({
   },
   screenOption: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
   },
   bottomTabs: {
     flex: 1,

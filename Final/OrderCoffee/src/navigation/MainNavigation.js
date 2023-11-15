@@ -34,7 +34,7 @@ export default function MainNavigation() {
 
   return (
     <Stack.Navigator
-      initialRouteName={showOnboarding ? 'Onboarding' : 'TabControl'}>
+      initialRouteName={showOnboarding ? 'TabControl' : 'TabControl'}>
       {showOnboarding && (
         <>
           <Stack.Screen

@@ -4,7 +4,8 @@ import {windowHeight, windowWidth} from '../utils/dimession';
 import {colors} from '../assets/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const BottomTabs = ({onTabPress}) => {
+const BottomTabs = ({ selectedTab, onTabPress }) => {
+  console.log(selectedTab);
   return (
     <View style={styles.container}>
       <TouchableOpacity
@@ -13,11 +14,19 @@ const BottomTabs = ({onTabPress}) => {
         onPress={() => onTabPress('Home')}>
         <View style={styles.tabContent}>
           <MaterialCommunityIcons
-            name="home-variant-outline"
+            name={
+              selectedTab === 'Home' ? 'home-variant' : 'home-variant-outline'
+            }
             size={windowHeight * 0.03}
-            color={'gray'}
+            color={selectedTab === 'Home' ? colors.mainColor : 'gray'}
           />
-          <Text style={styles.iconTitle}>Trang chủ</Text>
+          <Text
+            style={{
+              ...styles.iconTitle,
+              color: selectedTab === 'Home' ? colors.mainColor : 'gray',
+            }}>
+            Trang chủ
+          </Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity
@@ -26,15 +35,21 @@ const BottomTabs = ({onTabPress}) => {
         onPress={() => onTabPress('Order')}>
         <View style={styles.tabContent}>
           <MaterialCommunityIcons
-            name="shopping-outline"
+            name={selectedTab === 'Order' ? 'shopping' : 'shopping-outline'}
             size={windowHeight * 0.03}
-            color={'gray'}
+            color={selectedTab === 'Order' ? colors.mainColor : 'gray'}
           />
-          <Text style={styles.iconTitle}>Đặt hàng</Text>
+          <Text
+            style={{
+              ...styles.iconTitle,
+              color: selectedTab === 'Order' ? colors.mainColor : 'gray',
+            }}>
+            Đặt hàng
+          </Text>
         </View>
       </TouchableOpacity>
 
-      <View>
+      <View style={styles.tab}>
         <Text
           style={{
             marginTop: windowHeight * 0.045,
@@ -51,11 +66,21 @@ const BottomTabs = ({onTabPress}) => {
         onPress={() => onTabPress('Preferential')}>
         <View style={styles.tabContent}>
           <MaterialCommunityIcons
-            name="ticket-confirmation-outline"
+            name={
+              selectedTab === 'Preferential'
+                ? 'ticket-confirmation'
+                : 'ticket-confirmation-outline'
+            }
             size={windowHeight * 0.03}
-            color={'gray'}
+            color={selectedTab === 'Preferential' ? colors.mainColor : 'gray'}
           />
-          <Text style={styles.iconTitle}>Ưu đãi</Text>
+          <Text
+            style={{
+              ...styles.iconTitle,
+              color: selectedTab === 'Preferential' ? colors.mainColor : 'gray',
+            }}>
+            Ưu đãi
+          </Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity
@@ -66,9 +91,15 @@ const BottomTabs = ({onTabPress}) => {
           <MaterialCommunityIcons
             name="menu"
             size={windowHeight * 0.03}
-            color={'gray'}
+            color={selectedTab === 'Other' ? colors.mainColor : 'gray'}
           />
-          <Text style={styles.iconTitle}>Khác</Text>
+          <Text
+            style={{
+              ...styles.iconTitle,
+              color: selectedTab === 'Other' ? colors.mainColor : 'gray',
+            }}>
+            Khác
+          </Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -89,7 +120,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
     borderRadius: 10,
-    marginHorizontal: windowWidth * 0.03,
   },
   tabContent: {
     alignItems: 'center',

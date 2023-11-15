@@ -34,7 +34,7 @@ const Authentication = ({route, navigation}) => {
       await confirmationResult.confirm(otpValue);
       console.log('sucessfully');
 
-      navigation.navigate('HomeScreen');
+      navigation.navigate('TabControl');
     } catch (error) {
       console.log('Invalid code.');
       console.log(otpValue);

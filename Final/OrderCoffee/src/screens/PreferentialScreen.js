@@ -1,17 +1,16 @@
 import {View, Text, StyleSheet} from 'react-native';
-import React from 'react';
-import auth from '@react-native-firebase/auth';
+import React from 'react'
 import {useNavigation} from '@react-navigation/native';
 
-const HomeScreen = ({route, navigation}) => {
+const PreferentialScreen = ({route, navigation}) => {
   return (
     <View style={styles.container}>
-      <Text>HomeScreen</Text>
+      <Text>PreferentialScreen</Text>
     </View>
   );
 };
 
-export default HomeScreen;
+export default PreferentialScreen
 
 const styles = StyleSheet.create({
   container: {

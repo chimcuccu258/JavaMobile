@@ -1,20 +1,51 @@
 import {View, Text, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {windowHeight} from '../utils/dimession';
 import QRScan from '../components/QRScan';
 import BottomTabs from '../components/BottomTabs';
 import HomeScreen from './HomeScreen';
+import {useNavigation} from '@react-navigation/native';
+import OtherScreen from './OtherScreen';
+import PreferentialScreen from './PreferentialScreen';
+import OrderScreen from './OrderScreen';
 
 const TabControl = () => {
+  const navigation = useNavigation();
+  const [selectedTab, setSelectedTab] = useState('Home');
+
+  const handleTabPress = screenName => {
+    setSelectedTab(screenName);
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.screenOption}></View>
+      <View style={styles.screenOption}>
+        {selectedTab === 'Home' && (
+          <View style={styles.screenOption}>
+            <HomeScreen />
+          </View>
+        )}
+        {selectedTab === 'Order' && (
+          <View style={styles.screenOption}>
+            <OrderScreen />
+          </View>
+        )}
+        {selectedTab === 'Preferential' && (
+          <View style={styles.screenOption}>
+            <PreferentialScreen />
+          </View>
+        )}
+        {selectedTab === 'Other' && (
+          <View style={styles.screenOption}>
+            <OtherScreen />
+          </View>
+        )}
+      </View>
+
       <View style={styles.qr}>
         <QRScan />
       </View>
-      <View style={styles.bottomTabs}>
-        <BottomTabs />
-      </View>
+      <BottomTabs onTabPress={handleTabPress} />
     </View>
   );
 };

@@ -8,6 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 import OtherScreen from './OtherScreen';
 import PreferentialScreen from './PreferentialScreen';
 import OrderScreen from './OrderScreen';
+import { colors } from '../assets/colors';
 
 const TabControl = () => {
   const navigation = useNavigation();
@@ -55,8 +56,9 @@ export default TabControl;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 50,
+    // marginTop: 50,
     position: 'relative',
+    backgroundColor: colors.white,
   },
   screenOption: {
     flex: 1,

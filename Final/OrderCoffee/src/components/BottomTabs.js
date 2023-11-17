@@ -114,6 +114,14 @@ const styles = StyleSheet.create({
     width: windowWidth,
     height: windowHeight * 0.1,
     flexDirection: 'row',
+    ...Platform.select({
+      ios: {
+        shadowColor: 'black',
+        shadowOffset: {width: 0, height: 2},
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+      },
+    }),
   },
   tab: {
     flex: 1,

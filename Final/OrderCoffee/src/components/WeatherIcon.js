@@ -2,11 +2,11 @@ import React, {useState, useEffect} from 'react';
 import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {colors} from '../assets/colors';
-import {windowHeight, windowWidth} from '../utils/dimession';
-import LottieView from 'lottie-react-native';
+import { windowHeight, windowWidth } from '../utils/dimession';
 
 const WeatherIcon = () => {
-  const [weatherAnimation, setWeatherAnimation] = useState('Sunny.json');
+  const [weatherIcon, setWeatherIcon] = useState('weather-sunny');
+  const [iconColor, setIconColor] = useState('#FFD700');
 
   const fetchWeatherData = () => {
     const apiKey = '48508e72b228a42301c32c30a4881d0f';
@@ -16,80 +16,54 @@ const WeatherIcon = () => {
     fetch(apiUrl)
       .then(response => response.json())
       .then(data => {
+        const weatherId = data.weather[0].id;
         const isNight = isNightTime(data.sys.sunrise, data.sys.sunset);
-        const weatherCondition = getWeatherCondition(
-          data.weather[0].id,
-          isNight,
-        );
-        const animation = getWeatherAnimation(weatherCondition);
-        setWeatherAnimation(animation);
+
+        setWeatherIcon(getWeatherIcon(weatherId, isNight));
+        setIconColor(getIconColor(weatherId, isNight));
       })
       .catch(error => {
         console.error('Error fetching weather data:', error);
       });
   };
 
-  const getWeatherCondition = (weatherId, isNight) => {
+  const getWeatherIcon = (weatherId, isNight) => {
     if (isNight) {
-      return 'Night';
+      return 'weather-night';
     } else if (weatherId >= 200 && weatherId < 300) {
-      return 'Thunderstorm';
+      return 'weather-lightning-rainy';
     } else if (weatherId >= 300 && weatherId < 600) {
-      return 'Rain';
+      return 'weather-pouring';
+    } else if (weatherId >= 600 && weatherId < 700) {
+      return 'weather-snowy';
     } else if (weatherId >= 700 && weatherId < 800) {
-      return 'Fog';
+      return 'weather-fog';
     } else if (weatherId === 800) {
-      return 'Clear';
-    } else if (weatherId >= 801 && weatherId < 900) {
-      return 'Clouds';
+      return 'weather-sunny';
+    } else if (weatherId > 800 && weatherId < 900) {
+      return 'weather-partly-cloudy';
     } else {
-      return 'Unknown';
+      return 'weather-cloudy';
     }
   };
 
-
-  const getWeatherAnimation = weatherCondition => {
-    switch (weatherCondition) {
-      case 'Cloudy_night':
-        return 'Cloudy_night.json';
-      case 'Night':
-        return 'Night.json';
-      case 'Partly_shower':
-        return 'Partly_shower.json';
-      case 'Partly_cloudy':
-        return 'Partly_cloudy.json';
-      case 'Rainy_night':
-        return 'Rainy_night.json';
-      case 'Storm_shower':
-        return 'Storm_shower.json';
-      case 'Storm':
-        return 'Storm.json';
-      case 'Sunny':
-        return 'Sunny.json';
-      case 'Thunder':
-        return 'Thunder.json';
-      case 'Windy':
-        return 'Windy.json';
-      default:
-        return 'Sunny.json';
+  const getIconColor = (weatherId, isNight) => {
+    if (isNight) {
+      return '#000000';
+    } else if (weatherId >= 200 && weatherId < 600) {
+      return '#6495ED';
+    } else if (weatherId >= 600 && weatherId < 700) {
+      return '#FFFFFF';
+    } else if (weatherId >= 700 && weatherId < 800) {
+      return '#A9A9A9';
+    } else {
+      return '#FFD700';
     }
   };
 
   const isNightTime = (sunrise, sunset) => {
     const currentTime = new Date().getTime() / 1000;
-    const localSunrise = new Date(sunrise * 1000).toLocaleTimeString('en-US', {
-      hour12: false,
-      timeZone: 'Asia/Ho_Chi_Minh',
-    });
-    const localSunset = new Date(sunset * 1000).toLocaleTimeString('en-US', {
-      hour12: false,
-      timeZone: 'Asia/Ho_Chi_Minh',
-    });
-
-    return (
-      currentTime < new Date(localSunrise).getTime() / 1000 ||
-      currentTime > new Date(localSunset).getTime() / 1000
-    );
+    return currentTime < sunrise || currentTime > sunset;
   };
 
   useEffect(() => {
@@ -101,11 +75,10 @@ const WeatherIcon = () => {
   return (
     <TouchableOpacity activeOpacity={0.5}>
       <View style={styles.weatherBox}>
-        <LottieView
-          style={{flex: 1}}
-          source={require('../assets/animations/Cloudy_night.json')}
-          autoPlay
-          loop
+        <MaterialCommunityIcons
+          name={weatherIcon}
+          size={windowWidth * 0.08}
+          color={iconColor}
         />
       </View>
     </TouchableOpacity>
@@ -116,7 +89,7 @@ export default WeatherIcon;
 
 const styles = StyleSheet.create({
   weatherBox: {
-    width: windowWidth * 0.1,
-    height: windowHeight * 0.05,
+    width: windowWidth * 0.15,
+    height: windowHeight * 0.08,
   },
 });

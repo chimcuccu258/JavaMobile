@@ -9,7 +9,9 @@ import { colors } from '../assets/colors';
 const HomeScreen = ({route, navigation}) => {
   return (
     <View style={styles.container}>
-      <WeatherIcon />
+      <View style={styles.header}>
+        <WeatherIcon />
+      </View>
     </View>
   );
 };
@@ -19,7 +21,10 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: windowWidth * 0.05,
+    paddingHorizontal: windowWidth * 0.03,
+    backgroundColor: colors.white,
+  },
+  header: {
     marginTop: windowHeight * 0.05,
   },
 });

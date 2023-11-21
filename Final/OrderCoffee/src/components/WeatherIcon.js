@@ -3,6 +3,11 @@ import {View, TouchableOpacity, StyleSheet} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {colors} from '../assets/colors';
 import { windowHeight, windowWidth } from '../utils/dimession';
+import Animated, {
+  useSharedValue,
+  withDelay,
+  withSpring,
+} from 'react-native-reanimated';
 
 const WeatherIcon = () => {
   const [weatherIcon, setWeatherIcon] = useState('weather-sunny');

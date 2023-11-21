@@ -608,6 +608,35 @@ PODS:
     - Firebase/Auth (= 10.17.0)
     - React-Core
     - RNFBApp
+  - RNReanimated (3.5.4):
+    - DoubleConversion
+    - FBLazyVector
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCTRequired
+    - RCTTypeSafety
+    - React-callinvoker
+    - React-Core
+    - React-Core/DevSupport
+    - React-Core/RCTWebSocket
+    - React-CoreModules
+    - React-cxxreact
+    - React-hermes
+    - React-jsi
+    - React-jsiexecutor
+    - React-jsinspector
+    - React-RCTActionSheet
+    - React-RCTAnimation
+    - React-RCTAppDelegate
+    - React-RCTBlob
+    - React-RCTImage
+    - React-RCTLinking
+    - React-RCTNetwork
+    - React-RCTSettings
+    - React-RCTText
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNScreens (3.27.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
@@ -692,6 +721,7 @@ DEPENDENCIES:
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
+  - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -816,6 +846,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBAuth:
     :path: "../node_modules/@react-native-firebase/auth"
+  RNReanimated:
+    :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
   RNVectorIcons:
@@ -893,6 +925,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: f2974eca860c16a3e56eea5771fda8d12e2d2057
   RNFBApp: 5a16a735bad57ca29ee44757bde7e654c5bc8f60
   RNFBAuth: afec283a83131aef9ea13e51dc32e157ad57d455
+  RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
   RNScreens: 3c2d122f5e08c192e254c510b212306da97d2581
   RNVectorIcons: 23b6e11af4aaf104d169b1b0afa7e5cf96c676ce
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17

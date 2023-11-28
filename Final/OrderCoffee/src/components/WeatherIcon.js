@@ -94,7 +94,7 @@ export default WeatherIcon;
 
 const styles = StyleSheet.create({
   weatherBox: {
-    width: windowWidth * 0.15,
+    width: windowWidth * 0.10,
     height: windowHeight * 0.08,
   },
 });

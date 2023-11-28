@@ -1,6 +1,7 @@
 import {View, Text, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 import WeatherIcon from '../components/WeatherIcon';
 import {windowHeight, windowWidth} from '../utils/dimession';
@@ -8,16 +9,53 @@ import {colors} from '../assets/colors';
 import Animated from 'react-native-reanimated';
 import MemberCard from '../components/MemberCard';
 
-const HomeScreen = ({route, navigation}) => {
+const HomeScreen = ({route}) => {
+  const navigation = useNavigation();
+  const [userData, setUserData] = useState({
+    firstName: null,
+    lastName: null,
+  });
+  const phone = route?.params?.phone || '';
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const user = auth().currentUser;
+
+      if (user) {
+        try {
+          const querySnapshot = await firestore()
+            .collection('TblUsers')
+            .where('phone', '==', user.phoneNumber)
+            .get();
+          if (!querySnapshot.empty) {
+            const userData = querySnapshot.docs[0].data();
+            setUserData(userData);
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+    getUserData();
+  }, []);
+
+  const greetingMessage = userData.firstName
+    ? `Chào, ${userData.firstName}`
+    : 'Chào bạn';
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <WeatherIcon />
+        <View style={{justifyContent: 'center'}}>
+          <Text style={styles.greeting}>{greetingMessage}</Text>
+        </View>
       </View>
       <Animated.ScrollView style={styles.contents}>
-        <MemberCard />
+        <MemberCard
+          userData={userData}
+        />
       </Animated.ScrollView>
-
     </View>
   );
 };
@@ -31,9 +69,14 @@ const styles = StyleSheet.create({
   header: {
     marginHorizontal: windowWidth * 0.03,
     marginTop: windowHeight * 0.05,
-    height: windowHeight * 0.04,
+    height: windowHeight * 0.05,
+    flexDirection: 'row',
   },
   contents: {
     marginHorizontal: windowWidth * 0.03,
+  },
+  greeting: {
+    fontSize: 14,
+    fontWeight: '600',
   },
 });

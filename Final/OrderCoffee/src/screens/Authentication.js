@@ -92,7 +92,7 @@ const Authentication = ({route, navigation}) => {
     setInternalVal('');
   };
 
-  const onResendOTP = () => {
+  const onResendOTP = async () => {
     if (enableResend) {
       setCountdown(defaultCountdown);
       setEnableResend(false);
@@ -100,6 +100,12 @@ const Authentication = ({route, navigation}) => {
       clockCall = setInterval(() => {
         decrementClock();
       }, 1000);
+      try {
+        const newConfirmation = await auth().signInWithPhoneNumber(phone);
+        setConfirm(newConfirmation);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 

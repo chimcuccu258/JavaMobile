@@ -16,6 +16,8 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const Authentication = ({route, navigation}) => {
   const {phone, confirmationResult} = route.params;
@@ -34,7 +36,25 @@ const Authentication = ({route, navigation}) => {
       await confirmationResult.confirm(otpValue);
       console.log('sucessfully');
 
-      navigation.navigate('TabControl');
+      // navigation.navigate('TabControl');
+
+      async function checkUser(phoneNumber) {
+        try {
+          const usersRef = firestore().collection('TblUsers');
+          const querySnapshot = await usersRef
+            .where('phone', '==', phoneNumber)
+            .get();
+          if (!querySnapshot.empty) {
+            navigation.navigate('TabControl', {phone: phoneNumber});
+          } else {
+            navigation.navigate('IndexScreen', {phone: phoneNumber});
+          }
+        } catch (error) {
+          console.error('Error checking phone number:', error);
+        }
+      }
+
+      checkUser(phone);
     } catch (error) {
       console.log('Invalid code.');
       console.log(otpValue);

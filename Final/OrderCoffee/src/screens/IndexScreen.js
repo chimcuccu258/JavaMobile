@@ -26,6 +26,7 @@ const IndexScreen = ({props}) => {
       setConfirmation(confirmation);
       navigation.navigate('Authentication', {
         phone,
+        // confirmation
         confirmationResult: confirmation,
       });
     } catch (error) {

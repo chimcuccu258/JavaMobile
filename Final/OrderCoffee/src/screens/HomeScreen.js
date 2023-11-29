@@ -1,4 +1,4 @@
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -6,8 +6,15 @@ import {useNavigation} from '@react-navigation/native';
 import WeatherIcon from '../components/WeatherIcon';
 import {windowHeight, windowWidth} from '../utils/dimession';
 import {colors} from '../assets/colors';
-import Animated from 'react-native-reanimated';
 import MemberCard from '../components/MemberCard';
+import Animated, {
+  useSharedValue,
+  withTiming,
+  useAnimatedStyle,
+  Easing,
+} from 'react-native-reanimated';
+import Advertisement from '../components/Advertisement';
+
 
 const HomeScreen = ({route}) => {
   const navigation = useNavigation();
@@ -45,16 +52,16 @@ const HomeScreen = ({route}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <WeatherIcon />
-        <View style={{justifyContent: 'center'}}>
-          <Text style={styles.greeting}>{greetingMessage}</Text>
-        </View>
-      </View>
       <Animated.ScrollView style={styles.contents}>
-        <MemberCard
-          userData={userData}
-        />
+        <View style={styles.header}>
+          <WeatherIcon />
+          <View style={{justifyContent: 'center'}}>
+            <Text style={styles.greeting}>{greetingMessage}</Text>
+          </View>
+        </View>
+
+        <MemberCard userData={userData} style={styles.MemberCard} />
+        <Advertisement />
       </Animated.ScrollView>
     </View>
   );
@@ -65,6 +72,7 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'white',
   },
   header: {
     marginHorizontal: windowWidth * 0.03,

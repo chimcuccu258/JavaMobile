@@ -14,6 +14,7 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import Advertisement from '../components/Advertisement';
+import News from '../components/News';
 
 
 const HomeScreen = ({route}) => {
@@ -55,13 +56,14 @@ const HomeScreen = ({route}) => {
       <Animated.ScrollView style={styles.contents}>
         <View style={styles.header}>
           <WeatherIcon />
-          <View style={{justifyContent: 'center'}}>
+          <View style={{}}>
             <Text style={styles.greeting}>{greetingMessage}</Text>
           </View>
         </View>
 
         <MemberCard userData={userData} style={styles.MemberCard} />
-        <Advertisement />
+        <Advertisement userData={userData} />
+        <News userData={userData}/>
       </Animated.ScrollView>
     </View>
   );
@@ -76,12 +78,14 @@ const styles = StyleSheet.create({
   },
   header: {
     marginHorizontal: windowWidth * 0.03,
-    marginTop: windowHeight * 0.05,
+    marginTop: windowHeight * 0.04,
+    marginBottom: windowHeight * 0.02,
     height: windowHeight * 0.05,
     flexDirection: 'row',
+    alignItems: 'flex-end',
   },
   contents: {
-    marginHorizontal: windowWidth * 0.03,
+    // marginHorizontal: windowWidth * 0.03,
   },
   greeting: {
     fontSize: 14,

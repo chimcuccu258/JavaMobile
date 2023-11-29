@@ -13,6 +13,7 @@ import PreferentialScreen from '../screens/PreferentialScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {colors} from '../assets/colors';
 import {windowWidth} from '../utils/dimession';
+import NewsDetails from '../components/NewsDetails';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -141,6 +142,14 @@ const MainNavigation = () => {
         name="TabControl"
         options={{headerShown: false}}
         component={TabControl}
+      />
+
+      <Stack.Screen
+        name="NewsDetails"
+        options={{
+          headerShown: false,
+        }}
+        component={NewsDetails}
       />
     </Stack.Navigator>
   );

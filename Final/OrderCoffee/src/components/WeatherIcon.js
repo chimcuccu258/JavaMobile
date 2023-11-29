@@ -82,7 +82,7 @@ const WeatherIcon = () => {
       <View style={styles.weatherBox}>
         <MaterialCommunityIcons
           name={weatherIcon}
-          size={windowWidth * 0.08}
+          size={windowWidth * 0.07}
           color={iconColor}
         />
       </View>
@@ -94,7 +94,6 @@ export default WeatherIcon;
 
 const styles = StyleSheet.create({
   weatherBox: {
-    width: windowWidth * 0.10,
-    height: windowHeight * 0.08,
+    marginRight: 10,
   },
 });

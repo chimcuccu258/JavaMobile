@@ -41,6 +41,7 @@ export default MemberCard;
 
 const styles = StyleSheet.create({
   container: {
+    marginHorizontal: windowWidth * 0.03,
     width: windowWidth * 0.94,
     height: windowHeight * 0.2,
     backgroundColor: '#242424',

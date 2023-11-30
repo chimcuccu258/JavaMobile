@@ -16,7 +16,7 @@ import {colors} from '../assets/colors';
 
 const ProductList = ({menus}) => {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <FlatList
         data={menus}
         keyExtractor={(item, index) => index.toString()}
@@ -24,32 +24,34 @@ const ProductList = ({menus}) => {
         renderItem={({item}) => (
           <View>
             {item.menuItems.map((menuItem, index) => (
-              <View key={index} style={styles.productCard}>
-                <Image
-                  source={require('../assets/images/tch.png')}
-                  style={{
-                    width: windowWidth * 0.25,
-                    height: windowHeight * 0.12,
-                    borderRadius: 10,
-                  }}
-                />
-                <View style={styles.infoProduct}>
-                  <Text style={{fontSize: 14}}>{menuItem.title}</Text>
-                  <Text style={{fontSize: 14}}>{menuItem.price}</Text>
-                </View>
-                <TouchableOpacity>
-                  <AntDesign
-                    name="pluscircle"
-                    size={26}
-                    color={colors.mainColor}
+              <TouchableOpacity key={index} activeOpacity={0.8}>
+                <View style={styles.productCard}>
+                  <Image
+                    source={require('../assets/images/tch.png')}
+                    style={{
+                      width: windowWidth * 0.25,
+                      height: windowHeight * 0.12,
+                      borderRadius: 10,
+                    }}
                   />
-                </TouchableOpacity>
-              </View>
+                  <View style={styles.infoProduct}>
+                    <Text style={{fontSize: 14}}>{menuItem.title}</Text>
+                    <Text style={{fontSize: 14}}>{menuItem.price}</Text>
+                  </View>
+                  <TouchableOpacity activeOpacity={0.8}>
+                    <AntDesign
+                      name="pluscircle"
+                      size={26}
+                      color={colors.mainColor}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </TouchableOpacity>
             ))}
           </View>
         )}
       />
-    </View>
+    </ScrollView>
   );
 };
 

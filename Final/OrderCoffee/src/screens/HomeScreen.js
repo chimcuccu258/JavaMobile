@@ -13,7 +13,8 @@ import Animated, {
 } from 'react-native-reanimated';
 import Advertisement from '../components/Advertisement';
 import News from '../components/News';
-import {ActivityIndicator} from 'react-native';
+import { ActivityIndicator } from 'react-native';
+import {ScrollView} from 'react-native-virtualized-view';
 import {firebase} from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import auth from '@react-native-firebase/auth';

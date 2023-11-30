@@ -30,28 +30,17 @@ const OrderScreen = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const querySnapshot = await firestore().collection('TblMenu').get();
-        const menuData = [];
+        const snapshot = await firestore().collection('TblMenus').get();
+        const menuArrays = snapshot.docs.map(doc => doc.data());
+        setMenus(menuArrays);
 
-        for (const doc of querySnapshot.docs) {
-          const mainData = {
-            listTitle: doc.data().listTitle,
-          };
+        const imageRef = await firebase.storage().ref('MenuImage/').listAll();
+        const urls = await Promise.all(
+          imageRef.items.map(async ref => await ref.getDownloadURL()),
+        );
+        setImages(urls);
 
-          const menuCollection = await doc.ref.collection('menu').get();
-          const menuItems = menuCollection.docs.map(menuDoc => ({
-            title: menuDoc.data().title,
-            price: menuDoc.data().price,
-          }));
-
-          menuData.push({
-            ...mainData,
-            menuItems,
-          });
-        }
         setIsLoading(false);
-
-        setMenus(menuData);
       } catch (error) {
         console.error('Error fetching menu data:', error);
       }
@@ -69,7 +58,7 @@ const OrderScreen = () => {
       ) : (
         <>
           <MenuList menus={menus} />
-          <ProductList menus={menus} />
+          <ProductList menus={menus} images={images} />
         </>
       )}
     </ScrollView>

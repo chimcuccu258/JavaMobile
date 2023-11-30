@@ -12,11 +12,21 @@ import {windowWidth, windowHeight} from '../utils/dimession';
 import {colors} from '../assets/colors';
 import firestore from '@react-native-firebase/firestore';
 
-const MenuList = ({menus}) => {
+const MenuList = ({ menus }) => {
+  const uniqueListTitles = new Set();
+
+  const uniqueMenus = menus.filter(item => {
+    if (!uniqueListTitles.has(item.listTitle)) {
+      uniqueListTitles.add(item.listTitle);
+      return true;
+    }
+    return false;
+  });
+
   return (
     <View style={styles.container}>
       <FlatList
-        data={menus}
+        data={uniqueMenus}
         keyExtractor={(item, index) => index.toString()}
         horizontal
         showsHorizontalScrollIndicator={false}

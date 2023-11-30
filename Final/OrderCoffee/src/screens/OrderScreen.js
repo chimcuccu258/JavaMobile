@@ -14,7 +14,7 @@ import {colors} from '../assets/colors';
 import FastImage from 'react-native-fast-image';
 import MenuList from '../components/MenuList';
 import ProductList from '../components/ProductList';
-import { ScrollView } from 'react-native-virtualized-view';
+import {ScrollView} from 'react-native-virtualized-view';
 import {ActivityIndicator} from 'react-native';
 
 const OrderScreen = () => {
@@ -45,8 +45,8 @@ const OrderScreen = () => {
             ...mainData,
             menuItems,
           });
-          setIsLoading(false);
         }
+        setIsLoading(false);
 
         setMenus(menuData);
       } catch (error) {
@@ -61,7 +61,7 @@ const OrderScreen = () => {
     <ScrollView style={styles.container}>
       {isLoading ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="gray" />
+          <ActivityIndicator size="small" color="gray" />
         </View>
       ) : (
         <>
@@ -69,8 +69,6 @@ const OrderScreen = () => {
           <ProductList menus={menus} />
         </>
       )}
-      {/* <MenuList menus={menus} />
-      <ProductList menus={menus} /> */}
     </ScrollView>
   );
 };

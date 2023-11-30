@@ -27,7 +27,7 @@ const ProductList = ({menus}) => {
               <TouchableOpacity key={index} activeOpacity={0.8}>
                 <View style={styles.productCard}>
                   <Image
-                    source={require('../assets/images/tch.png')}
+                    source={require('../assets/images/tch.png')} //image
                     style={{
                       width: windowWidth * 0.25,
                       height: windowHeight * 0.12,

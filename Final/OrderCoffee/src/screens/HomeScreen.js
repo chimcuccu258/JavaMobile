@@ -1,7 +1,5 @@
 import {View, Text, StyleSheet, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 import WeatherIcon from '../components/WeatherIcon';
 import {windowHeight, windowWidth} from '../utils/dimession';
@@ -15,35 +13,53 @@ import Animated, {
 } from 'react-native-reanimated';
 import Advertisement from '../components/Advertisement';
 import News from '../components/News';
+import {ActivityIndicator} from 'react-native';
+import {firebase} from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const HomeScreen = ({route}) => {
   const navigation = useNavigation();
+  const phone = route?.params?.phone || '';
+
   const [userData, setUserData] = useState({
     firstName: null,
     lastName: null,
   });
-  const phone = route?.params?.phone || '';
+  const [images, setImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const getUserData = async () => {
-      const user = auth().currentUser;
+    const fetchData = async () => {
+      try {
+        const user = auth().currentUser;
 
-      if (user) {
-        try {
+        if (user) {
           const querySnapshot = await firestore()
             .collection('TblUsers')
             .where('phone', '==', user.phoneNumber)
             .get();
+
           if (!querySnapshot.empty) {
             const userData = querySnapshot.docs[0].data();
             setUserData(userData);
           }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
         }
+
+        const imageRef = await firebase.storage().ref('AdsImage/').listAll();
+        const urls = await Promise.all(
+          imageRef.items.map(async ref => await ref.getDownloadURL()),
+        );
+        setImages(urls);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        setIsLoading(false);
       }
     };
-    getUserData();
+
+    fetchData();
   }, []);
 
   const greetingMessage = userData.firstName
@@ -61,8 +77,16 @@ const HomeScreen = ({route}) => {
         </View>
 
         <MemberCard userData={userData} style={styles.MemberCard} />
-        <Advertisement userData={userData} />
-        <News userData={userData}/>
+        {isLoading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="small" color="gray" />
+          </View>
+        ) : (
+          <>
+            <Advertisement userData={userData} images={images} />
+            <News userData={userData} images={images} />
+          </>
+        )}
       </Animated.ScrollView>
     </View>
   );
@@ -86,5 +110,10 @@ const styles = StyleSheet.create({
   greeting: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: windowHeight * 0.5,
   },
 });

@@ -16,26 +16,9 @@ import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 
-const News = ({userData}) => {
+const News = ({userData, images}) => {
   const navigation = useNavigation();
-  const [images, setImages] = useState([]);
   const [newsData, setNewsData] = useState([]);
-
-  useEffect(() => {
-    const getImage = async () => {
-      try {
-        const imageRef = await firebase.storage().ref('NewsImage/').listAll();
-        const urls = await Promise.all(
-          imageRef.items.map(async ref => await ref.getDownloadURL()),
-        );
-        setImages(urls);
-      } catch (error) {
-        console.error('Error fetching images from Firebase Storage:', error);
-      }
-    };
-
-    getImage();
-  }, []);
 
   useEffect(() => {
     const getNewsData = async () => {
@@ -48,20 +31,7 @@ const News = ({userData}) => {
         console.error('Error fetching data from Firestore:', error);
       }
     };
-
-    const getImage = async () => {
-      try {
-        const imageRef = await firebase.storage().ref('NewsImage/').listAll();
-        const urls = await Promise.all(
-          imageRef.items.map(async ref => await ref.getDownloadURL()),
-        );
-        setImages(urls);
-      } catch (error) {
-        console.error('Error fetching images from Firebase Storage:', error);
-      }
-    };
     getNewsData();
-    getImage();
   }, []);
 
   const matchedNews = newsData.map((news, index) => ({

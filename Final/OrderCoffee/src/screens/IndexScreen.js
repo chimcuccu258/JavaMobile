@@ -26,7 +26,6 @@ const IndexScreen = ({props}) => {
       setConfirmation(confirmation);
       navigation.navigate('Authentication', {
         phone,
-        // confirmation
         confirmationResult: confirmation,
       });
     } catch (error) {
@@ -49,7 +48,7 @@ const IndexScreen = ({props}) => {
           <Text
             style={{
               fontSize: 16,
-              color: colors.mainColor,
+              color: 'white',
               fontWeight: 'bold',
             }}>
             Enter phone number to login

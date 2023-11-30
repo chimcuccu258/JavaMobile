@@ -5,9 +5,22 @@ import {windowHeight, windowWidth} from '../utils/dimession';
 import {colors} from '../assets/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
+import auth from '@react-native-firebase/auth';
 
 const OtherScreen = () => {
   const navigation = useNavigation();
+
+    const touchLogout = () => {
+      auth()
+        .signOut()
+        .then(() => {
+          console.log('User signed out!');
+          navigation.navigate('Onboarding');
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    };
 
   return (
     <View style={styles.container}>
@@ -45,8 +58,8 @@ const OtherScreen = () => {
               style={{
                 flexDirection: 'row',
               }}>
-              <Feather name="user" size={windowWidth * 0.035} />
-              <Text style={{fontSize: windowWidth * 0.032, marginLeft: 10}}>
+              <Feather name="user" size={18} />
+              <Text style={{fontSize: 14, marginLeft: 10}}>
                 Thông tin tài khoản
               </Text>
             </View>
@@ -56,21 +69,20 @@ const OtherScreen = () => {
               style={{
                 flexDirection: 'row',
               }}>
-              <Feather name="settings" size={windowWidth * 0.035} />
-              <Text style={{fontSize: windowWidth * 0.032, marginLeft: 10}}>
-                Cài đặt
-              </Text>
+              <Feather name="settings" size={18} />
+              <Text style={{fontSize: 14, marginLeft: 10}}>Cài đặt</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnList} activeOpacity={0.5}>
+          <TouchableOpacity
+            style={styles.btnList}
+            activeOpacity={0.5}
+            onPress={touchLogout}>
             <View
               style={{
                 flexDirection: 'row',
               }}>
-              <Feather name="log-out" size={windowWidth * 0.035} />
-              <Text style={{fontSize: windowWidth * 0.032, marginLeft: 10}}>
-                Đăng xuất
-              </Text>
+              <Feather name="log-out" size={18} />
+              <Text style={{fontSize: 14, marginLeft: 10}}>Đăng xuất</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -100,7 +112,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     width: (windowWidth * 0.9) / 2,
-    height: windowHeight * 0.08,
+    height: windowHeight * 0.1,
     backgroundColor: colors.white,
     borderRadius: 10,
     justifyContent: 'center',
@@ -115,10 +127,10 @@ const styles = StyleSheet.create({
     }),
   },
   textGroup: {
-    padding: 10,
+    padding: 15,
   },
   textBtn: {
-    fontSize: windowWidth * 0.032,
+    fontSize: 14,
     marginTop: windowHeight * 0.01,
   },
   list: {
@@ -126,7 +138,7 @@ const styles = StyleSheet.create({
   },
   btnList: {
     width: windowWidth - windowWidth * 0.06,
-    height: windowHeight * 0.05,
+    height: windowHeight * 0.055,
     marginBottom: windowHeight * 0.01,
     backgroundColor: colors.white,
     borderRadius: 10,

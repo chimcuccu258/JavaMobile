@@ -30,6 +30,7 @@ const News = ({newsData, newsImages}) => {
         <Text style={{fontWeight: '600', fontSize: 15}}>Khám phá thêm ✨</Text>
         <TouchableOpacity
           activeOpacity={0.5}
+          onPress={() => navigation.navigate('NewsExpand')}
           style={{flexDirection: 'row', alignContent: 'center'}}>
           <Text style={{color: colors.mainColor, fontWeight: '500'}}>
             Xem thêm{' '}

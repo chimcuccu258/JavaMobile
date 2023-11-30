@@ -14,6 +14,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {colors} from '../assets/colors';
 import {windowWidth} from '../utils/dimession';
 import NewsDetails from '../components/NewsDetails';
+import NewsExpand from '../components/NewsExpand';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -150,6 +151,18 @@ const MainNavigation = () => {
           headerShown: false,
         }}
         component={NewsDetails}
+      />
+
+      <Stack.Screen
+        name="NewsExpand"
+        options={{
+          headerShown: true,
+          headerTitle: 'Khám phá thêm ✨',
+          headerBackTitle: false,
+          headerBackTitleVisible: false,
+          headerTitleAlign: null,
+        }}
+        component={NewsExpand}
       />
     </Stack.Navigator>
   );

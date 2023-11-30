@@ -13,6 +13,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {colors} from '../assets/colors';
 import Share from 'react-native-share';
 import {firebase} from '@react-native-firebase/auth';
+import FastImage from 'react-native-fast-image';
 
 const NewsDetails = ({route}) => {
   const navigation = useNavigation();
@@ -94,7 +95,7 @@ const NewsDetails = ({route}) => {
           <Text style={styles.headerSection1}>{item.title}</Text>
         </View>
         <View style={styles.cover}>
-          <Image
+          <FastImage
             source={{uri: item.imageUrl}}
             style={{
               width: '100%',
@@ -108,7 +109,7 @@ const NewsDetails = ({route}) => {
           <Text style={styles.sectionText}>{item.section2}</Text>
         </View>
         <View style={styles.cover2}>
-          <Image
+          <FastImage
             source={{uri: item.imageUrl}}
             style={{
               width: '100%',

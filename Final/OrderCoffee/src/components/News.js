@@ -14,6 +14,7 @@ import storage from '@react-native-firebase/storage';
 import {firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
+import FastImage from 'react-native-fast-image';
 
 const News = ({userData}) => {
   const navigation = useNavigation();
@@ -98,7 +99,7 @@ const News = ({userData}) => {
           >
             <View style={styles.newsBox}>
               <View style={styles.imageBox}>
-                <Image
+                <FastImage
                   source={{uri: item.imageUrl}}
                   style={{
                     width: '100%',

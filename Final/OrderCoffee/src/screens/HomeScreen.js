@@ -16,7 +16,6 @@ import Animated, {
 import Advertisement from '../components/Advertisement';
 import News from '../components/News';
 
-
 const HomeScreen = ({route}) => {
   const navigation = useNavigation();
   const [userData, setUserData] = useState({
@@ -56,7 +55,7 @@ const HomeScreen = ({route}) => {
       <Animated.ScrollView style={styles.contents}>
         <View style={styles.header}>
           <WeatherIcon />
-          <View style={{}}>
+          <View>
             <Text style={styles.greeting}>{greetingMessage}</Text>
           </View>
         </View>
@@ -83,9 +82,6 @@ const styles = StyleSheet.create({
     height: windowHeight * 0.05,
     flexDirection: 'row',
     alignItems: 'flex-end',
-  },
-  contents: {
-    // marginHorizontal: windowWidth * 0.03,
   },
   greeting: {
     fontSize: 14,

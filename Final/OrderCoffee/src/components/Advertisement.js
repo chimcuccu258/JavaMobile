@@ -12,6 +12,7 @@ import {windowHeight, windowWidth} from '../utils/dimession';
 import storage from '@react-native-firebase/storage';
 import {useNavigation} from '@react-navigation/native';
 import {firebase} from '@react-native-firebase/auth';
+import FastImage from 'react-native-fast-image';
 
 const Advertisement = ({userData}) => {
   const navigation = useNavigation();
@@ -44,8 +45,8 @@ const Advertisement = ({userData}) => {
       renderItem={({item}) => (
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => navigation.navigate('Order')}>
-          <Image
+          onPress={() => navigation.navigate('Order', userData)}>
+          <FastImage
             source={{uri: item}}
             style={{
               width: windowWidth * 0.941,

@@ -16,27 +16,12 @@ import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 
-const News = ({userData, images}) => {
+const News = ({newsData, newsImages}) => {
   const navigation = useNavigation();
-  const [newsData, setNewsData] = useState([]);
-
-  useEffect(() => {
-    const getNewsData = async () => {
-      try {
-        const snapshot = await firestore().collection('TblNews')
-        .get();
-        const newsArray = snapshot.docs.map(doc => doc.data());
-        setNewsData(newsArray);
-      } catch (error) {
-        console.error('Error fetching data from Firestore:', error);
-      }
-    };
-    getNewsData();
-  }, []);
 
   const matchedNews = newsData.map((news, index) => ({
     ...news,
-    imageUrl: images[index],
+    imageUrl: newsImages[index],
   }));
 
   return (
@@ -65,8 +50,7 @@ const News = ({userData, images}) => {
         renderItem={({item}) => (
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => navigation.navigate('NewsDetails', {item})}
-          >
+            onPress={() => navigation.navigate('NewsDetails', {item})}>
             <View style={styles.newsBox}>
               <View style={styles.imageBox}>
                 <FastImage

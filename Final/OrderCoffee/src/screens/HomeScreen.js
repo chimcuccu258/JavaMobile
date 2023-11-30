@@ -28,12 +28,14 @@ const HomeScreen = ({route}) => {
     lastName: null,
   });
   const [images, setImages] = useState([]);
+  const [newsData, setNewsData] = useState([]);
+  const [newsImages, setNewsImages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const user = auth().currentUser;
+        const user = firebase.auth().currentUser;
 
         if (user) {
           const querySnapshot = await firestore()
@@ -59,7 +61,24 @@ const HomeScreen = ({route}) => {
       }
     };
 
+    const fetchNewsData = async () => {
+      try {
+        const snapshot = await firestore().collection('TblNews').get();
+        const newsArray = snapshot.docs.map(doc => doc.data());
+        setNewsData(newsArray);
+
+        const imageRef = await firebase.storage().ref('NewsImage/').listAll();
+        const urls = await Promise.all(
+          imageRef.items.map(async ref => await ref.getDownloadURL()),
+        );
+        setNewsImages(urls);
+      } catch (error) {
+        console.error('Error fetching news data:', error);
+      }
+    };
+
     fetchData();
+    fetchNewsData();
   }, []);
 
   const greetingMessage = userData.firstName
@@ -84,7 +103,7 @@ const HomeScreen = ({route}) => {
         ) : (
           <>
             <Advertisement userData={userData} images={images} />
-            <News userData={userData} images={images} />
+            <News newsData={newsData} newsImages={newsImages} />
           </>
         )}
       </Animated.ScrollView>

@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   FlatList,
   Image,
+  TextInput,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -15,9 +16,11 @@ import {firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const UserDetails = ({userData}) => {
+const UserDetails = ({route}) => {
   const navigation = useNavigation();
+  const {userData} = route.params;
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -36,10 +39,40 @@ const UserDetails = ({userData}) => {
         </View>
       </View>
       <View style={styles.body}>
-        <TouchableOpacity>
-          <View>
-            <Text></Text>
+        <TouchableOpacity activeOpacity={0.5} style={styles.inputField}>
+          <TextInput>{userData.firstName}</TextInput>
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.5} style={styles.inputField}>
+          <TextInput>{userData.lastName}</TextInput>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          style={[styles.inputField, {backgroundColor: '#dddddd'}]}>
+          <TextInput editable={false}>{userData.email}</TextInput>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          style={[styles.inputField, {backgroundColor: '#dddddd'}]}>
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              justifyContent: 'space-between',
+            }}>
+            <TextInput editable={false}>{userData.dob}</TextInput>
+            <MaterialCommunityIcons
+              name="calendar-text"
+              size={18}
+              color={colors.darkGray}
+            />
           </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          style={styles.inputField}></TouchableOpacity>
+
+        <TouchableOpacity activeOpacity={0.5} style={styles.submitBtn}>
+          <Text style={{color: 'white'}}>Cập nhật tài khoản</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -72,5 +105,27 @@ const styles = StyleSheet.create({
   },
   body: {
     flex: 1,
+    marginTop: 30,
+    marginHorizontal: 15,
+  },
+  inputField: {
+    width: windowWidth * 0.93,
+    height: windowHeight * 0.06,
+    borderRadius: 10,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    borderWidth: 0.5,
+    borderColor: '#BDBDBD',
+    marginBottom: 20,
+  },
+  submitBtn: {
+    width: windowWidth * 0.93,
+    height: windowHeight * 0.06,
+    borderRadius: 10,
+    backgroundColor: colors.mainColor,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 20,
   },
 });

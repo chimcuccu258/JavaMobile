@@ -17,10 +17,22 @@ import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
 
 const UserDetails = ({route}) => {
   const navigation = useNavigation();
-  const {userData} = route.params;
+  const { userData } = route.params;
+  
+  const options = [
+    'Nữ',
+    'Nam',
+    'Cancel',
+  ];
+
+  shơwActionSheet = () => {
+    this.ActionSheet.show();
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -69,7 +81,10 @@ const UserDetails = ({route}) => {
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.5}
-          style={styles.inputField}></TouchableOpacity>
+          onPress={this.showActionSheet}
+          style={styles.inputField}>
+          <Text>{userData.gender ? 'Nữ' : 'Nam'}</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity activeOpacity={0.5} style={styles.submitBtn}>
           <Text style={{color: 'white'}}>Cập nhật tài khoản</Text>

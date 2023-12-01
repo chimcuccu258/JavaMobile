@@ -31,7 +31,7 @@ const NewsExpand = ({route}) => {
         <View style={styles.headerContents}>
           <View style={styles.headerDetails}>
             <Text
-              style={{fontWeight: '700', fontSize: 15, textAlign: 'center'}}>
+              style={{fontWeight: '700', fontSize: 16, textAlign: 'center'}}>
               Khám phá thêm ✨
             </Text>
           </View>

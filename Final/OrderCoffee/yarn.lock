@@ -5925,6 +5925,11 @@ react-native-share@^10.0.1:
   resolved "https://registry.yarnpkg.com/react-native-share/-/react-native-share-10.0.1.tgz#ea1121389754c4a01363711664f8424263f09d50"
   integrity sha512-dEn4DTf3/qQnLuwXkZtuFkF3pq7a4LDqmOY+R/kcgeuKIBWheGzCxHXVD7XGm6qhwXXkiD0SOiDUrGjnXa96eg==
 
+react-native-shared-element@^0.8.9:
+  version "0.8.9"
+  resolved "https://registry.yarnpkg.com/react-native-shared-element/-/react-native-shared-element-0.8.9.tgz#22aa3231f905ede3821949e1bfb1f62b12ca9a19"
+  integrity sha512-vlzhv3amkJm+8gA0WSeLzcCKNtN/ypZbic3IZ4Bwwr6GeWDrYzZ6k7PdHCioy7fwIVOJ1X9Pi/aYF9HK4Kb0qg==
+
 react-native-svg@^14.0.0:
   version "14.0.0"
   resolved "https://registry.npmjs.org/react-native-svg/-/react-native-svg-14.0.0.tgz"

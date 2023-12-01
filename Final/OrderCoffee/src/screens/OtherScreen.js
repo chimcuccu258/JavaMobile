@@ -1,26 +1,58 @@
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {windowHeight, windowWidth} from '../utils/dimession';
 import {colors} from '../assets/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import auth from '@react-native-firebase/auth';
+import storage from '@react-native-firebase/storage';
+import {firebase} from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 const OtherScreen = () => {
   const navigation = useNavigation();
 
-    const touchLogout = () => {
-      auth()
-        .signOut()
-        .then(() => {
-          console.log('User signed out!');
-          navigation.navigate('Onboarding');
-        })
-        .catch(error => {
-          console.log(error);
-        });
-    };
+  const [userData, setUserData] = useState({
+    firstName: null,
+    lastName: null,
+  });
+
+  const touchLogout = () => {
+    auth()
+      .signOut()
+      .then(() => {
+        console.log('User signed out!');
+        navigation.navigate('Onboarding');
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const user = firebase.auth().currentUser;
+
+      if (user) {
+        const querySnapshot = await firestore()
+          .collection('TblUsers')
+          .where('phone', '==', user.phoneNumber)
+          .get();
+
+        if (!querySnapshot.empty) {
+          const userData = querySnapshot.docs[0].data();
+          setUserData(userData);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -53,7 +85,10 @@ const OtherScreen = () => {
       <View>
         <Text style={styles.title}>Tài khoản</Text>
         <View style={styles.list}>
-          <TouchableOpacity style={styles.btnList} activeOpacity={0.5}>
+          <TouchableOpacity
+            style={styles.btnList}
+            onPress={() => navigation.navigate('UserDetails', {userData})}
+            activeOpacity={0.5}>
             <View
               style={{
                 flexDirection: 'row',

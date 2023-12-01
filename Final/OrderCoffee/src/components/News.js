@@ -30,10 +30,15 @@ const News = ({newsData, newsImages}) => {
         <Text style={{fontWeight: '600', fontSize: 15}}>Khám phá thêm ✨</Text>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => navigation.navigate('NewsExpand')}
+          onPress={() =>
+            navigation.navigate('NewsExpand', {
+              newsData,
+              newsImages,
+            })
+          }
           style={{flexDirection: 'row', alignContent: 'center'}}>
           <Text style={{color: colors.mainColor, fontWeight: '500'}}>
-            Xem thêm{' '}
+            Xem thêm
           </Text>
           <Ionicons
             name="chevron-forward-outline"

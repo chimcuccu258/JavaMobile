@@ -18,7 +18,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {colors} from '../assets/colors';
 import formatPrice from '../utils/formatPrice';
 
-const ProductList = ({menus, images}) => {
+const ProductList = ({menus, images, onProductPress, onPlusIconPress}) => {
   const uniqueListTitles = new Set();
 
   const uniqueMenus = menus.filter(item => {
@@ -41,41 +41,47 @@ const ProductList = ({menus, images}) => {
             menus[index].listTitle !== menus[index - 1].listTitle ? (
               <Text style={styles.listTitle}>{item.listTitle}</Text>
             ) : null}
-            <TouchableOpacity activeOpacity={0.8}>
-              <View style={styles.productCard}>
-                <FastImage
-                  source={{uri: images[index]}}
-                  style={{
-                    width: windowWidth * 0.25,
-                    height: windowHeight * 0.12,
-                    borderRadius: 10,
-                  }}
-                />
-                <View style={styles.infoProduct}>
-                  <Text
+            <View style={styles.card}>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => onProductPress(item.title)}>
+                <View style={styles.productCard}>
+                  <FastImage
+                    source={{uri: images[index]}}
                     style={{
-                      fontSize: 14,
-                      fontWeight: '500',
-                    }}>
-                    {item.title}
-                  </Text>
-                  <Text
-                    style={{
-                      fontSize: 13,
-                      marginTop: 5,
-                    }}>
-                    {formatPrice(item.price)}đ
-                  </Text>
-                </View>
-                <TouchableOpacity activeOpacity={0.8}>
-                  <AntDesign
-                    name="pluscircle"
-                    size={26}
-                    color={colors.mainColor}
+                      width: windowWidth * 0.25,
+                      height: windowHeight * 0.12,
+                      borderRadius: 10,
+                    }}
                   />
-                </TouchableOpacity>
-              </View>
-            </TouchableOpacity>
+                  <View style={styles.infoProduct}>
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        fontWeight: '500',
+                      }}>
+                      {item.title}
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 13,
+                        marginTop: 5,
+                      }}>
+                      {formatPrice(item.price)}đ
+                    </Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => onPlusIconPress(item.title)}>
+                <AntDesign
+                  name="pluscircle"
+                  size={26}
+                  color={colors.mainColor}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       />
@@ -90,8 +96,14 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 10,
   },
-  productCard: {
+  card: {
     width: windowWidth * 0.945,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  productCard: {
+    width: windowWidth * 0.7,
     height: windowHeight * 0.12,
     flexDirection: 'row',
     alignItems: 'center',
@@ -106,6 +118,7 @@ const styles = StyleSheet.create({
   listTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginTop: 30,
+    marginTop: 20,
+    marginBottom: 10,
   },
 });

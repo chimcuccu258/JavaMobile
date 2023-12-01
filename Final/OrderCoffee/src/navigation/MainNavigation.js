@@ -15,6 +15,7 @@ import {colors} from '../assets/colors';
 import {windowWidth} from '../utils/dimession';
 import NewsDetails from '../components/NewsDetails';
 import NewsExpand from '../components/NewsExpand';
+import UserDetails from '../components/UserDetails';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -156,13 +157,19 @@ const MainNavigation = () => {
       <Stack.Screen
         name="NewsExpand"
         options={{
-          headerShown: true,
+          headerShown: false,
           headerTitle: 'Khám phá thêm ✨',
-          headerBackTitle: false,
-          headerBackTitleVisible: false,
-          headerTitleAlign: null,
         }}
         component={NewsExpand}
+      />
+
+      <Stack.Screen
+        name="UserDetails"
+        options={{
+          headerShown: false,
+          headerTitle: 'Thông tin tài khoản',
+        }}
+        component={UserDetails}
       />
     </Stack.Navigator>
   );

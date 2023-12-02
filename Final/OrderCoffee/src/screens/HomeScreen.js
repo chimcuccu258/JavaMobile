@@ -119,7 +119,6 @@ const HomeScreen = ({route}) => {
         <MemberCard userData={userData} style={styles.MemberCard} />
         {isLoading || refreshing ? (
           <View style={styles.loadingContainer}>
-            {/* <ActivityIndicator size="small" color="gray" /> */}
             <LottieView
               source={require('../assets/animations/christmas.json')}
               style={{width: windowWidth * 0.5, height: windowWidth * 0.5}}

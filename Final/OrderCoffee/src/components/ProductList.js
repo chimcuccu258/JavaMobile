@@ -44,7 +44,7 @@ const ProductList = ({menus, images, onProductPress, onPlusIconPress}) => {
             <View style={styles.card}>
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() => onProductPress(item.title)}>
+                onPress={() => onProductPress(item.title, images[index])}>
                 <View style={styles.productCard}>
                   <FastImage
                     source={{uri: images[index]}}

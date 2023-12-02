@@ -63,8 +63,8 @@ const OrderScreen = () => {
     }
   };
 
-  const handleProductPress = productTitle => {
-    setSelectedProduct(productTitle);
+  const handleProductPress = (productTitle, imageUrl) => {
+    setSelectedProduct({title: productTitle, image: imageUrl});
     setIsModalVisible(true);
   };
 

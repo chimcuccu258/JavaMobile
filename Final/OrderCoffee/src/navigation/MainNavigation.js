@@ -16,6 +16,7 @@ import {windowWidth} from '../utils/dimession';
 import NewsDetails from '../components/NewsDetails';
 import NewsExpand from '../components/NewsExpand';
 import UserDetails from '../components/UserDetails';
+import Setting from '../screens/Setting';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -84,7 +85,6 @@ const TabControl = () => {
         component={OtherScreen}
         options={{
           headerShown: false,
-          // headerTitle: 'Khác',
         }}
       />
     </Tab.Navigator>
@@ -167,9 +167,16 @@ const MainNavigation = () => {
         name="UserDetails"
         options={{
           headerShown: false,
-          headerTitle: 'Thông tin tài khoản',
         }}
         component={UserDetails}
+      />
+
+      <Stack.Screen
+        name="Setting"
+        options={{
+          headerShown: false,
+        }}
+        component={Setting}
       />
     </Stack.Navigator>
   );

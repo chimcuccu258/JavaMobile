@@ -43,9 +43,9 @@ const Authentication = ({route, navigation}) => {
             .where('phone', '==', phoneNumber)
             .get();
           if (!querySnapshot.empty) {
-            navigation.navigate('TabControl', { phone: phoneNumber });
+            navigation.navigate('TabControl', {phone: phoneNumber});
           } else {
-            navigation.navigate('IndexScreen', { phone: phoneNumber });
+            navigation.navigate('IndexScreen', {phone: phoneNumber});
           }
         } catch (error) {
           console.error('Error checking phone number:', error);

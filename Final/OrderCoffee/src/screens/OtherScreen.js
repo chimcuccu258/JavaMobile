@@ -1,5 +1,5 @@
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {windowHeight, windowWidth} from '../utils/dimession';
 import {colors} from '../assets/colors';
@@ -9,6 +9,7 @@ import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import {firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import {ScrollView} from 'react-native-virtualized-view';
 
 const OtherScreen = () => {
   const navigation = useNavigation();
@@ -99,7 +100,10 @@ const OtherScreen = () => {
               </Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.btnList} activeOpacity={0.5}>
+          <TouchableOpacity
+            style={styles.btnList}
+            onPress={() => navigation.navigate('Setting')}
+            activeOpacity={0.5}>
             <View
               style={{
                 flexDirection: 'row',

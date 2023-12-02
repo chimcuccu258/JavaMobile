@@ -6,6 +6,7 @@ import {
   FlatList,
   Image,
   TextInput,
+  Modal,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -18,20 +19,11 @@ import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
+import {ScrollView} from 'react-native-virtualized-view';
 
 const UserDetails = ({route}) => {
   const navigation = useNavigation();
-  const { userData } = route.params;
-  
-  const options = [
-    'Nữ',
-    'Nam',
-    'Cancel',
-  ];
-
-  shơwActionSheet = () => {
-    this.ActionSheet.show();
-  }
+  const {userData} = route.params;
 
   return (
     <View style={styles.container}>
@@ -50,46 +42,48 @@ const UserDetails = ({route}) => {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.body}>
-        <TouchableOpacity activeOpacity={0.5} style={styles.inputField}>
-          <TextInput>{userData.firstName}</TextInput>
-        </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.5} style={styles.inputField}>
-          <TextInput>{userData.lastName}</TextInput>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={[styles.inputField, {backgroundColor: '#dddddd'}]}>
-          <TextInput editable={false}>{userData.email}</TextInput>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={[styles.inputField, {backgroundColor: '#dddddd'}]}>
-          <View
-            style={{
-              flexDirection: 'row',
-              width: '100%',
-              justifyContent: 'space-between',
-            }}>
-            <TextInput editable={false}>{userData.dob}</TextInput>
-            <MaterialCommunityIcons
-              name="calendar-text"
-              size={18}
-              color={colors.darkGray}
-            />
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={this.showActionSheet}
-          style={styles.inputField}>
-          <Text>{userData.gender ? 'Nữ' : 'Nam'}</Text>
-        </TouchableOpacity>
+      <>
+        <ScrollView style={styles.body}>
+          <TouchableOpacity activeOpacity={0.5} style={styles.inputField}>
+            <TextInput>{userData.firstName}</TextInput>
+          </TouchableOpacity>
+          <TouchableOpacity activeOpacity={0.5} style={styles.inputField}>
+            <TextInput>{userData.lastName}</TextInput>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={[styles.inputField, {backgroundColor: '#dddddd'}]}>
+            <TextInput editable={false}>{userData.email}</TextInput>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={[styles.inputField, {backgroundColor: '#dddddd'}]}>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                justifyContent: 'space-between',
+              }}>
+              <TextInput editable={false}>{userData.dob}</TextInput>
+              <MaterialCommunityIcons
+                name="calendar-text"
+                size={18}
+                color={colors.darkGray}
+              />
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={this.showActionSheet}
+            style={styles.inputField}>
+            <Text>{userData.gender ? 'Nữ' : 'Nam'}</Text>
+          </TouchableOpacity>
 
-        <TouchableOpacity activeOpacity={0.5} style={styles.submitBtn}>
-          <Text style={{color: 'white'}}>Cập nhật tài khoản</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity activeOpacity={0.5} style={styles.submitBtn}>
+            <Text style={{color: 'white'}}>Cập nhật tài khoản</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </>
     </View>
   );
 };

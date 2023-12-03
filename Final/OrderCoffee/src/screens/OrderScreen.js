@@ -3,7 +3,6 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  Touchable,
   TouchableOpacity,
   Modal,
   RefreshControl,
@@ -21,9 +20,21 @@ import {ActivityIndicator} from 'react-native';
 import storage from '@react-native-firebase/storage';
 import {firebase} from '@react-native-firebase/auth';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import ModalByProduct from './ModalByProduct';
 import ModalByIcon from './ModalByIcon';
 import LottieView from 'lottie-react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+import {
+  Gesture,
+  GestureDetector,
+  GestureRecognizer,
+} from 'react-native-gesture-handler';
+import Animated, {
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 const OrderScreen = () => {
   const navigation = useNavigation();
@@ -39,6 +50,8 @@ const OrderScreen = () => {
   const [selectedProduct2, setSelectedProduct2] = useState(null);
 
   const [refreshing, setRefreshing] = useState(false);
+
+  const quantity = 1;
 
   useEffect(() => {
     fetchData();
@@ -63,8 +76,13 @@ const OrderScreen = () => {
     }
   };
 
-  const handleProductPress = (productTitle, imageUrl) => {
-    setSelectedProduct({title: productTitle, image: imageUrl});
+  const handleProductPress = (product, index) => {
+    setSelectedProduct({
+      title: product.title,
+      image: images[index],
+      description: product.description,
+      price: product.price,
+    });
     setIsModalVisible(true);
   };
 
@@ -90,6 +108,37 @@ const OrderScreen = () => {
       setIsLoading(false);
       setRefreshing(false);
     }
+  };
+
+  const translationY = useSharedValue(0);
+
+  const gesture = Gesture.Pan()
+    .runOnJS(true)
+    .onBegin(event => {})
+    .onUpdate(event => {
+      console.log('event', event.translationY);
+
+      translationY.value = event.translationY;
+    })
+    .onEnd(event => {
+      if (event.translationY > windowHeight) {
+        runOnJS(closeModal)();
+      } else {
+        translationY.value = withTiming(0);
+      }
+    })
+    .onFinalize(event => {});
+
+  const viewStyleAnim = useAnimatedStyle(() => {
+    return {
+      transform: [{translateY: translationY.value}],
+    };
+  });
+
+  const [showFullDescription, setShowFullDescription] = useState(false);
+
+  const toggleDescription = () => {
+    setShowFullDescription(!showFullDescription);
   };
 
   return (
@@ -124,28 +173,102 @@ const OrderScreen = () => {
         )}
       </ScrollView>
       {isModalVisible ? (
-        <Modal
-          visible={isModalVisible}
-          animationType="slide"
-          presentationStyle="pageSheet">
-          <View style={styles.modalContainer}>
-            <ModalByProduct
-              closeModal={closeModal}
-              selectedProduct={selectedProduct}
-            />
-          </View>
-        </Modal>
+        <GestureDetector gesture={gesture}>
+          <Modal
+            visible={isModalVisible}
+            onRequestClose={closeModal}
+            style={[
+              {
+                height: windowHeight,
+              },
+              viewStyleAnim,
+            ]}
+            animationType="slide"
+            presentationStyle="pageSheet">
+            <Animated.ScrollView>
+              <FastImage
+                source={{uri: selectedProduct?.image}}
+                style={{
+                  width: windowWidth,
+                  height: windowWidth,
+                }}
+                resizeMode={FastImage.resizeMode.contain}
+                onError={error => console.error('Image Error:', error)}
+              />
+              <View style={{marginHorizontal: 15}}>
+                <Text style={styles.title}>{selectedProduct?.title}</Text>
+                <Text
+                  numberOfLines={showFullDescription ? 0 : 2}
+                  ellipsizeMode="tail"
+                  style={styles.description}>
+                  {selectedProduct?.description}
+                </Text>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  onPress={toggleDescription}>
+                  <Text style={styles.readMoreLess}>
+                    {showFullDescription ? 'Rút gọn' : 'Xem thêm'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </Animated.ScrollView>
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={closeModal}
+              style={styles.closeBtn}>
+              <AntDesign name="close" size={22} color={colors.white} />
+            </TouchableOpacity>
+            <View style={styles.optionBtn}>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: colors.secondaryColor,
+                    padding: 5,
+                    borderRadius: 50,
+                  }}>
+                  <AntDesign name="minus" size={20} color={colors.mainColor} />
+                </TouchableOpacity>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    // fontWeight: 'bold',
+                    marginHorizontal: 10,
+                  }}>
+                  {quantity}
+                </Text>
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: colors.secondaryColor,
+                    padding: 5,
+                    borderRadius: 50,
+                  }}>
+                  <AntDesign name="plus" size={20} color={colors.mainColor} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        </GestureDetector>
       ) : isModalVisible2 ? (
         <Modal
           visible={isModalVisible2}
+          onRequestClose={closeModal}
+          style={[
+            {
+              height: windowHeight,
+            },
+            viewStyleAnim,
+          ]}
           animationType="slide"
           presentationStyle="pageSheet">
-          <View style={styles.modalContainer}>
-            <ModalByIcon
-              closeModal={closeModal}
-              selectedProduct2={selectedProduct2}
-            />
-          </View>
+          <Animated.ScrollView>
+            <Text>{selectedProduct2}</Text>
+          </Animated.ScrollView>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={closeModal}
+            style={styles.closeBtn}>
+            <AntDesign name="close" size={22} color={colors.white} />
+          </TouchableOpacity>
         </Modal>
       ) : null}
     </>
@@ -163,5 +286,35 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: windowHeight * 0.8,
+  },
+  closeBtn: {
+    position: 'absolute',
+    marginTop: 10,
+    alignItems: 'flex-end',
+    right: 10,
+    backgroundColor: colors.darkGray,
+    borderRadius: 20,
+    padding: 5,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginVertical: 20,
+  },
+  description: {
+    fontSize: 14,
+    marginBottom: 20,
+  },
+  readMoreLess: {
+    color: colors.mainColor,
+  },
+  optionBtn: {
+    flex: 1,
+    position: 'absolute',
+    height: windowHeight * 0.12,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'pink',
   },
 });

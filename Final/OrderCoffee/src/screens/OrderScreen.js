@@ -20,14 +20,12 @@ import {ActivityIndicator} from 'react-native';
 import storage from '@react-native-firebase/storage';
 import {firebase} from '@react-native-firebase/auth';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import ModalByIcon from './ModalByIcon';
 import LottieView from 'lottie-react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
 import {
   Gesture,
   GestureDetector,
-  GestureRecognizer,
+  TextInput,
 } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -35,21 +33,32 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import formatPrice from '../utils/formatPrice';
 
 const OrderScreen = () => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(true);
-
   const [menus, setMenus] = useState([]);
   const [images, setImages] = useState([]);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-
-  const [isModalVisible2, setIsModalVisible2] = useState(false);
-  const [selectedProduct2, setSelectedProduct2] = useState(null);
-
   const [refreshing, setRefreshing] = useState(false);
+
+  const [noteModalVisible, setNoteModalVisible] = useState(false);
+  const [noteText, setNoteText] = useState([]);
+
+  const handleNoteBoxPress = () => {
+    setNoteModalVisible(true);
+  };
+
+  const closeNoteModal = () => {
+    setNoteModalVisible(false);
+  };
+
+  const handleNoteSave = () => {
+    console.log('Note saved:', noteText);
+    closeNoteModal();
+  };
 
   const quantity = 1;
 
@@ -60,15 +69,43 @@ const OrderScreen = () => {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const snapshot = await firestore().collection('TblMenus').get();
-      const menuArrays = snapshot.docs.map(doc => doc.data());
-      setMenus(menuArrays);
 
-      const imageRef = await firebase.storage().ref('MenuImage/').listAll();
-      const urls = await Promise.all(
-        imageRef.items.map(async ref => await ref.getDownloadURL()),
-      );
-      setImages(urls);
+      // lấy hình từ AsyncStorage nếu có  
+      const cachedMenus = await AsyncStorage.getItem('cachedMenus');
+      const cachedImages = await AsyncStorage.getItem('cachedMenuImages');
+
+      // const snapshot = await firestore().collection('TblMenus').get();
+      // const menuArrays = snapshot.docs.map(doc => doc.data());
+      // setMenus(menuArrays);
+
+      // const imageRef = await firebase.storage().ref('MenuImage/').listAll();
+      // const urls = await Promise.all(
+      //   imageRef.items.map(async ref => await ref.getDownloadURL()),
+      // );
+      // setImages(urls);
+
+      if (cachedMenus && cachedImages) {
+        setMenus(JSON.parse(cachedMenus));
+        setImages(JSON.parse(cachedImages));
+        setIsLoading(false);
+      } else {
+        // ko có thì lấy từ firestore & storage
+        const snapshot = await firestore().collection('TblMenus').get();
+        const menuArrays = snapshot.docs.map(doc => doc.data());
+        setMenus(menuArrays);
+
+        const imageRef = await firebase.storage().ref('MenuImage/').listAll();
+        const urls = await Promise.all(
+          imageRef.items.map(async ref => await ref.getDownloadURL()),
+        );
+        setImages(urls);
+
+        // lưu lại mai dùng tiếp
+        await AsyncStorage.setItem('cachedMenus', JSON.stringify(menuArrays));
+        await AsyncStorage.setItem('cachedMenuImages', JSON.stringify(urls));
+
+        setIsLoading(false);
+      }
 
       setIsLoading(false);
     } catch (error) {
@@ -86,15 +123,12 @@ const OrderScreen = () => {
     setIsModalVisible(true);
   };
 
-  const handlePlusIconPress = productTitle => {
-    setSelectedProduct2(productTitle);
-    setIsModalVisible2(true);
+  const handlePlusIconPress = items => {
+    console.log('items', items);
   };
 
   const closeModal = () => {
-    setSelectedProduct(null);
     setIsModalVisible(false);
-    setIsModalVisible2(false);
   };
 
   const onRefresh = async () => {
@@ -128,7 +162,6 @@ const OrderScreen = () => {
       }
     })
     .onFinalize(event => {});
-
   const viewStyleAnim = useAnimatedStyle(() => {
     return {
       transform: [{translateY: translationY.value}],
@@ -136,7 +169,6 @@ const OrderScreen = () => {
   });
 
   const [showFullDescription, setShowFullDescription] = useState(false);
-
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
   };
@@ -151,7 +183,6 @@ const OrderScreen = () => {
         }>
         {isLoading || refreshing ? (
           <View style={styles.loadingContainer}>
-            {/* <ActivityIndicator size="small" color="gray" /> */}
             <LottieView
               source={require('../assets/animations/christmas.json')}
               style={{width: windowWidth * 0.5, height: windowWidth * 0.5}}
@@ -210,6 +241,68 @@ const OrderScreen = () => {
                     {showFullDescription ? 'Rút gọn' : 'Xem thêm'}
                   </Text>
                 </TouchableOpacity>
+                <View style={styles.note}>
+                  <Text style={styles.noteTitle}>Yêu cầu khác</Text>
+                  <Text style={styles.noteContent}>
+                    Nhập yêu cầu của bạn tại đây
+                  </Text>
+                  {/* {isModalVisible ? (
+                    
+                  ) : null} */}
+                  <TouchableOpacity
+                    activeOpacity={0.5}
+                    onPress={handleNoteBoxPress}
+                    style={styles.noteBox}>
+                    <Text style={{color: colors.darkGray}}>Thêm ghi chú</Text>
+                  </TouchableOpacity>
+                  {noteModalVisible ? (
+                    <Modal
+                      visible={noteModalVisible}
+                      onRequestClose={closeNoteModal}
+                      style={[
+                        {
+                          height: windowHeight / 2,
+                        },
+                        viewStyleAnim,
+                      ]}
+                      animationType="slide"
+                      presentationStyle="pageSheet">
+                      <Animated.ScrollView>
+                        <View style={styles.noteModalHeader}>
+                          <Text style={styles.noteTitle}>Ghi chú</Text>
+                        </View>
+                        <View style={styles.noteModalContent}>
+                          <TextInput
+                            style={styles.noteInput}
+                            placeholder="Nhập ghi chú của bạn"
+                            multiline
+                            value={noteText.toString()}
+                            onChangeText={text => setNoteText(text)}
+                          />
+                          <TouchableOpacity
+                            activeOpacity={0.5}
+                            onPress={handleNoteSave}
+                            style={styles.saveNoteBtn}>
+                            <Text
+                              style={{color: colors.white, fontWeight: 'bold'}}>
+                              Nhập
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                      </Animated.ScrollView>
+                      <TouchableOpacity
+                        activeOpacity={0.5}
+                        onPress={closeNoteModal}
+                        style={styles.closeBtn}>
+                        <AntDesign
+                          name="close"
+                          size={22}
+                          color={colors.white}
+                        />
+                      </TouchableOpacity>
+                    </Modal>
+                  ) : null}
+                </View>
               </View>
             </Animated.ScrollView>
             <TouchableOpacity
@@ -219,57 +312,35 @@ const OrderScreen = () => {
               <AntDesign name="close" size={22} color={colors.white} />
             </TouchableOpacity>
             <View style={styles.optionBtn}>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: colors.secondaryColor,
-                    padding: 5,
-                    borderRadius: 50,
-                  }}>
-                  <AntDesign name="minus" size={20} color={colors.mainColor} />
-                </TouchableOpacity>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    // fontWeight: 'bold',
-                    marginHorizontal: 10,
-                  }}>
-                  {quantity}
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: colors.secondaryColor,
-                    padding: 5,
-                    borderRadius: 50,
-                  }}>
-                  <AntDesign name="plus" size={20} color={colors.mainColor} />
+              <View style={styles.optionBtnContainer}>
+                <View style={styles.optionBtnContainerLeft}>
+                  <TouchableOpacity style={styles.quantityBtn}>
+                    <AntDesign
+                      name="minus"
+                      size={20}
+                      color={colors.mainColor}
+                    />
+                  </TouchableOpacity>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      marginHorizontal: 10,
+                    }}>
+                    {quantity}
+                  </Text>
+                  <TouchableOpacity style={styles.quantityBtn}>
+                    <AntDesign name="plus" size={20} color={colors.mainColor} />
+                  </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={styles.orderBtn}>
+                  <Text style={styles.orderBtnText}>
+                    Chọn {formatPrice(selectedProduct?.price)}đ
+                  </Text>
                 </TouchableOpacity>
               </View>
             </View>
           </Modal>
         </GestureDetector>
-      ) : isModalVisible2 ? (
-        <Modal
-          visible={isModalVisible2}
-          onRequestClose={closeModal}
-          style={[
-            {
-              height: windowHeight,
-            },
-            viewStyleAnim,
-          ]}
-          animationType="slide"
-          presentationStyle="pageSheet">
-          <Animated.ScrollView>
-            <Text>{selectedProduct2}</Text>
-          </Animated.ScrollView>
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={closeModal}
-            style={styles.closeBtn}>
-            <AntDesign name="close" size={22} color={colors.white} />
-          </TouchableOpacity>
-        </Modal>
       ) : null}
     </>
   );
@@ -311,10 +382,82 @@ const styles = StyleSheet.create({
   optionBtn: {
     flex: 1,
     position: 'absolute',
-    height: windowHeight * 0.12,
+    height: windowHeight * 0.11,
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: 'pink',
+    paddingTop: 20,
+  },
+  optionBtnContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: 15,
+  },
+  optionBtnContainerLeft: {
+    flexDirection: 'row',
+    paddingHorizontal: 10,
+    alignItems: 'center',
+  },
+  quantityBtn: {
+    backgroundColor: colors.secondaryColor,
+    padding: 5,
+    borderRadius: 50,
+  },
+  orderBtn: {
+    backgroundColor: colors.mainColor,
+    paddingHorizontal: 55,
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  orderBtnText: {
+    fontSize: 16,
+    color: colors.white,
+    marginHorizontal: 10,
+    fontWeight: 'bold',
+  },
+  note: {
+    marginVertical: 20,
+  },
+  noteTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  noteContent: {
+    fontSize: 12,
+    marginBottom: 20,
+    color: colors.darkGray,
+  },
+  noteBox: {
+    padding: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colors.lightGray,
+  },
+
+  noteModalHeader: {
+    marginHorizontal: 15,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+
+  noteModalContent: {
+    marginHorizontal: 15,
+    marginTop: 20,
+  },
+  noteInput: {
+    height: windowHeight * 0.1,
+    borderColor: colors.lightGray,
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+  },
+  saveNoteBtn: {
+    backgroundColor: colors.mainColor,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
   },
 });

@@ -34,6 +34,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import formatPrice from '../utils/formatPrice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const OrderScreen = () => {
   const navigation = useNavigation();

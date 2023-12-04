@@ -13,14 +13,16 @@ import storage from '@react-native-firebase/storage';
 import {useNavigation} from '@react-navigation/native';
 import {firebase} from '@react-native-firebase/auth';
 import FastImage from 'react-native-fast-image';
+import advertisement from '../assets/advertisement';
 
-const Advertisement = ({userData, images}) => {
+const Advertisement = ({userData, advertisement}) => {
   const navigation = useNavigation();
 
   return (
     <FlatList
-      data={images}
-      keyExtractor={(item, index) => index.toString()}
+      data={advertisement}
+      // keyExtractor={(item, index) => index.toString()}
+      keyExtractor={item => item.id}
       horizontal
       showsHorizontalScrollIndicator={false}
       pagingEnabled
@@ -30,7 +32,8 @@ const Advertisement = ({userData, images}) => {
           activeOpacity={0.5}
           onPress={() => navigation.navigate('Order', userData)}>
           <FastImage
-            source={{uri: item}}
+            // source={{uri: item.image}}
+            source={item.image}
             style={{
               width: windowWidth * 0.941,
               height: windowHeight * 0.25,

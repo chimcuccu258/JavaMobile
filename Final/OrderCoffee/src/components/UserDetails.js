@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
   },
   inputField: {
-    width: windowWidth * 0.93,
+    width: windowWidth * 0.92,
     height: windowHeight * 0.06,
     borderRadius: 10,
     backgroundColor: 'white',
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   submitBtn: {
-    width: windowWidth * 0.93,
+    width: windowWidth * 0.92,
     height: windowHeight * 0.06,
     borderRadius: 10,
     backgroundColor: colors.mainColor,

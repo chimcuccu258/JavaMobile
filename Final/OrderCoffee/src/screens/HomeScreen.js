@@ -22,6 +22,7 @@ import firestore from '@react-native-firebase/firestore';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import LottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import advertisement from '../assets/advertisement';
 
 const HomeScreen = ({route}) => {
   const navigation = useNavigation();
@@ -71,22 +72,22 @@ const HomeScreen = ({route}) => {
           setUserData(userData);
         }
       }
-      // lấy hình từ AsyncStorage nếu có  
-      const cachedImages = await AsyncStorage.getItem('cachedImages');
+      // // lấy hình từ AsyncStorage nếu có  
+      // const cachedImages = await AsyncStorage.getItem('cachedImages');
 
-      if (cachedImages) {
-        const cachedImagesArray = JSON.parse(cachedImages);
-        setImages(cachedImagesArray);
-      } else {
-        // ko có thì lấy từ fb_storage
-        const imageRef = await firebase.storage().ref('AdsImage/').listAll();
-        const urls = await Promise.all(
-          imageRef.items.map(async ref => await ref.getDownloadURL()),
-        );
-        // lưu lại mai dùng tiếp
-        await AsyncStorage.setItem('cachedImages', JSON.stringify(urls));
-        setImages(urls);
-      }
+      // if (cachedImages) {
+      //   const cachedImagesArray = JSON.parse(cachedImages);
+      //   setImages(cachedImagesArray);
+      // } else {
+      //   // ko có thì lấy từ fb_storage
+      //   const imageRef = await firebase.storage().ref('AdsImage/').listAll();
+      //   const urls = await Promise.all(
+      //     imageRef.items.map(async ref => await ref.getDownloadURL()),
+      //   );
+      //   // lưu lại mai dùng tiếp
+      //   await AsyncStorage.setItem('cachedImages', JSON.stringify(urls));
+      //   setImages(urls);
+      // }
 
       setIsLoading(false);
     } catch (error) {
@@ -141,8 +142,16 @@ const HomeScreen = ({route}) => {
           </View>
         ) : (
           <>
-            <Advertisement userData={userData} images={images} />
-            <News newsData={newsData} newsImages={newsImages} />
+            <Advertisement
+              userData={userData}
+              // images={images}
+              advertisement={advertisement}
+            />
+            <News
+              newsData={newsData}
+              newsImages={newsImages}
+              advertisement={advertisement}
+            />
           </>
         )}
       </Animated.ScrollView>

@@ -72,22 +72,22 @@ const HomeScreen = ({route}) => {
           setUserData(userData);
         }
       }
-      // // lấy hình từ AsyncStorage nếu có  
-      // const cachedImages = await AsyncStorage.getItem('cachedImages');
+      // lấy hình từ AsyncStorage nếu có
+      const cachedImages = await AsyncStorage.getItem('cachedImages');
 
-      // if (cachedImages) {
-      //   const cachedImagesArray = JSON.parse(cachedImages);
-      //   setImages(cachedImagesArray);
-      // } else {
-      //   // ko có thì lấy từ fb_storage
-      //   const imageRef = await firebase.storage().ref('AdsImage/').listAll();
-      //   const urls = await Promise.all(
-      //     imageRef.items.map(async ref => await ref.getDownloadURL()),
-      //   );
-      //   // lưu lại mai dùng tiếp
-      //   await AsyncStorage.setItem('cachedImages', JSON.stringify(urls));
-      //   setImages(urls);
-      // }
+      if (cachedImages) {
+        const cachedImagesArray = JSON.parse(cachedImages);
+        setImages(cachedImagesArray);
+      } else {
+        // ko có thì lấy từ fb_storage
+        const imageRef = await firebase.storage().ref('AdsImage/').listAll();
+        const urls = await Promise.all(
+          imageRef.items.map(async ref => await ref.getDownloadURL()),
+        );
+        // lưu lại mai dùng tiếp
+        await AsyncStorage.setItem('cachedImages', JSON.stringify(urls));
+        setImages(urls);
+      }
 
       setIsLoading(false);
     } catch (error) {
@@ -102,11 +102,22 @@ const HomeScreen = ({route}) => {
       const newsArray = snapshot.docs.map(doc => doc.data());
       setNewsData(newsArray);
 
-      const imageRef = await firebase.storage().ref('NewsImage/').listAll();
-      const urls = await Promise.all(
-        imageRef.items.map(async ref => await ref.getDownloadURL()),
-      );
-      setNewsImages(urls);
+      // lấy hình từ AsyncStorage nếu có
+      const cacheNewsImage = await AsyncStorage.getItem('cacheNewsImage');
+
+      if (cacheNewsImage) {
+        const cacheNewsImageArray = JSON.parse(cacheNewsImage);
+        setNewsImages(cacheNewsImageArray);
+      } else {
+        // ko có thì lấy từ fb_storage
+        const imageRef = await firebase.storage().ref('NewsImage/').listAll();
+        const urls = await Promise.all(
+          imageRef.items.map(async ref => await ref.getDownloadURL()),
+        );
+        // lưu lại mai dùng tiếp
+        await AsyncStorage.setItem('cacheNewsImage', JSON.stringify(urls));
+        setNewsImages(urls);
+      }
     } catch (error) {
       console.error('Error fetching news data:', error);
     }
@@ -142,16 +153,8 @@ const HomeScreen = ({route}) => {
           </View>
         ) : (
           <>
-            <Advertisement
-              userData={userData}
-              // images={images}
-              advertisement={advertisement}
-            />
-            <News
-              newsData={newsData}
-              newsImages={newsImages}
-              advertisement={advertisement}
-            />
+            <Advertisement userData={userData} images={images} />
+            <News newsData={newsData} newsImages={newsImages} />
           </>
         )}
       </Animated.ScrollView>

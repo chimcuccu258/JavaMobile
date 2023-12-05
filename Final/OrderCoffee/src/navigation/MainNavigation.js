@@ -75,7 +75,7 @@ const TabControl = () => {
         name="Preferential"
         component={PreferentialScreen}
         options={{
-          headerShown: true,
+          headerShown: false,
           headerTitle: 'Ưu đãi của bạn',
           tabBarLabel: 'Ưu đãi',
         }}

@@ -7,6 +7,7 @@ import {
   Image,
   TextInput,
   Modal,
+  Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -15,15 +16,72 @@ import {colors} from '../assets/colors';
 import storage from '@react-native-firebase/storage';
 import {firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
 import {ScrollView} from 'react-native-virtualized-view';
 
-const UserDetails = ({route}) => {
+const UserDetails = ({ route }) => {
   const navigation = useNavigation();
-  const {userData} = route.params;
+  const { userData } = route.params;
+
+  const [firstName, setFirstName] = useState(userData.firstName || '');
+  const [lastName, setLastName] = useState(userData.lastName || '');
+
+  // const [firstName, setFirstName] = useState(userData.firstName || '');
+  // const [lastName, setLastName] = useState(userData.lastName || '');
+  const [isButtonActive, setIsButtonActive] = useState(false);
+
+
+  const handleFirstNameChange = text => {
+    setFirstName(text);
+    setIsButtonActive(true);
+  };
+
+  const handleLastNameChange = text => {
+    setLastName(text);
+    setIsButtonActive(true);
+  };
+
+const handleUpdate = async () => {
+  try {
+    const user = auth().currentUser;
+
+    if (user) {
+      const querySnapshot = await firestore()
+        .collection('TblUsers')
+        .where('phone', '==', user.phoneNumber)
+        .get();
+
+      if (!querySnapshot.empty) {
+        const docRef = querySnapshot.docs[0].ref;
+        const userData = {
+          firstName,
+          lastName,
+        };
+
+        await docRef.update(userData);
+
+        Alert.alert('Thông báo', 'Cập nhật thông tin thành công 🎉', [
+          {
+            text: 'OK',
+            onPress: () => console.log('OK Pressed'),
+          },
+        ]);
+
+        setIsButtonActive(false); // Reset button state after successful update
+      } else {
+        console.error('No user data found');
+      }
+    } else {
+      console.error('No user found');
+    }
+  } catch (error) {
+    console.error('Error updating data:', error);
+  }
+};
 
   return (
     <View style={styles.container}>
@@ -45,10 +103,14 @@ const UserDetails = ({route}) => {
       <>
         <ScrollView style={styles.body}>
           <TouchableOpacity activeOpacity={0.5} style={styles.inputField}>
-            <TextInput>{userData.firstName}</TextInput>
+            <TextInput value={firstName} onChangeText={handleFirstNameChange}>
+              {userData.firstName}
+            </TextInput>
           </TouchableOpacity>
           <TouchableOpacity activeOpacity={0.5} style={styles.inputField}>
-            <TextInput>{userData.lastName}</TextInput>
+            <TextInput value={lastName} onChangeText={handleLastNameChange}>
+              {userData.lastName}
+            </TextInput>
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.5}
@@ -74,12 +136,19 @@ const UserDetails = ({route}) => {
           </TouchableOpacity>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={this.showActionSheet}
+            editable={false}
             style={styles.inputField}>
             <Text>{userData.gender ? 'Nữ' : 'Nam'}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity activeOpacity={0.5} style={styles.submitBtn}>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={[
+              styles.submitBtn,
+              {backgroundColor: isButtonActive ? colors.mainColor : '#cccccc'},
+            ]}
+            disabled={!isButtonActive}
+            onPress={handleUpdate}>
             <Text style={{color: 'white'}}>Cập nhật tài khoản</Text>
           </TouchableOpacity>
         </ScrollView>

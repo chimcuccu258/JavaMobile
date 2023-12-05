@@ -35,6 +35,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import formatPrice from '../utils/formatPrice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import styles from '../assets/orderScreenStyle';
 
 const OrderScreen = () => {
   const navigation = useNavigation();
@@ -46,7 +47,7 @@ const OrderScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const [noteModalVisible, setNoteModalVisible] = useState(false);
-  const [noteText, setNoteText] = useState([]);
+  const [noteText, setNoteText] = useState('');
 
   const handleNoteBoxPress = () => {
     setNoteModalVisible(true);
@@ -54,6 +55,7 @@ const OrderScreen = () => {
 
   const closeNoteModal = () => {
     setNoteModalVisible(false);
+    setNoteText('');
   };
 
   const handleNoteSave = () => {
@@ -61,7 +63,8 @@ const OrderScreen = () => {
     closeNoteModal();
   };
 
-  const quantity = 1;
+  // const quantity = 1;
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     fetchData();
@@ -74,16 +77,6 @@ const OrderScreen = () => {
       // lấy hình từ AsyncStorage nếu có  
       const cachedMenus = await AsyncStorage.getItem('cachedMenus');
       const cachedImages = await AsyncStorage.getItem('cachedMenuImages');
-
-      // const snapshot = await firestore().collection('TblMenus').get();
-      // const menuArrays = snapshot.docs.map(doc => doc.data());
-      // setMenus(menuArrays);
-
-      // const imageRef = await firebase.storage().ref('MenuImage/').listAll();
-      // const urls = await Promise.all(
-      //   imageRef.items.map(async ref => await ref.getDownloadURL()),
-      // );
-      // setImages(urls);
 
       if (cachedMenus && cachedImages) {
         setMenus(JSON.parse(cachedMenus));
@@ -130,6 +123,7 @@ const OrderScreen = () => {
 
   const closeModal = () => {
     setIsModalVisible(false);
+    setShowFullDescription(false);
   };
 
   const onRefresh = async () => {
@@ -173,6 +167,18 @@ const OrderScreen = () => {
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
   };
+  
+  const handleIncrease = () => {
+    if (quantity < 10) {
+      setQuantity(prevQuantity => prevQuantity + 1);
+    }
+  };
+
+  const handleDecrease = () => {
+    if (quantity > 1) {
+      setQuantity(prevQuantity => prevQuantity - 1);
+    }
+  };
 
   return (
     <>
@@ -200,6 +206,9 @@ const OrderScreen = () => {
               images={images}
               onProductPress={handleProductPress}
               onPlusIconPress={handlePlusIconPress}
+              // increase={handleIncrease}
+              // decrease={handleDecrease}
+              quantity={quantity}
             />
           </>
         )}
@@ -247,9 +256,6 @@ const OrderScreen = () => {
                   <Text style={styles.noteContent}>
                     Nhập yêu cầu của bạn tại đây
                   </Text>
-                  {/* {isModalVisible ? (
-                    
-                  ) : null} */}
                   <TouchableOpacity
                     activeOpacity={0.5}
                     onPress={handleNoteBoxPress}
@@ -315,7 +321,9 @@ const OrderScreen = () => {
             <View style={styles.optionBtn}>
               <View style={styles.optionBtnContainer}>
                 <View style={styles.optionBtnContainerLeft}>
-                  <TouchableOpacity style={styles.quantityBtn}>
+                  <TouchableOpacity
+                    style={styles.quantityBtn}
+                    onPress={() => handleDecrease()}>
                     <AntDesign
                       name="minus"
                       size={20}
@@ -329,7 +337,9 @@ const OrderScreen = () => {
                     }}>
                     {quantity}
                   </Text>
-                  <TouchableOpacity style={styles.quantityBtn}>
+                  <TouchableOpacity
+                    style={styles.quantityBtn}
+                    onPress={() => handleIncrease()}>
                     <AntDesign name="plus" size={20} color={colors.mainColor} />
                   </TouchableOpacity>
                 </View>
@@ -348,117 +358,3 @@ const OrderScreen = () => {
 };
 
 export default OrderScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  loadingContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: windowHeight * 0.8,
-  },
-  closeBtn: {
-    position: 'absolute',
-    marginTop: 10,
-    alignItems: 'flex-end',
-    right: 10,
-    backgroundColor: colors.darkGray,
-    borderRadius: 20,
-    padding: 5,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginVertical: 20,
-  },
-  description: {
-    fontSize: 14,
-    marginBottom: 20,
-  },
-  readMoreLess: {
-    color: colors.mainColor,
-  },
-  optionBtn: {
-    flex: 1,
-    position: 'absolute',
-    height: windowHeight * 0.11,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    paddingTop: 20,
-  },
-  optionBtnContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginHorizontal: 15,
-  },
-  optionBtnContainerLeft: {
-    flexDirection: 'row',
-    paddingHorizontal: 10,
-    alignItems: 'center',
-  },
-  quantityBtn: {
-    backgroundColor: colors.secondaryColor,
-    padding: 5,
-    borderRadius: 50,
-  },
-  orderBtn: {
-    backgroundColor: colors.mainColor,
-    paddingHorizontal: 55,
-    paddingVertical: 10,
-    borderRadius: 5,
-  },
-  orderBtnText: {
-    fontSize: 16,
-    color: colors.white,
-    marginHorizontal: 10,
-    fontWeight: 'bold',
-  },
-  note: {
-    marginVertical: 20,
-  },
-  noteTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 5,
-  },
-  noteContent: {
-    fontSize: 12,
-    marginBottom: 20,
-    color: colors.darkGray,
-  },
-  noteBox: {
-    padding: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: colors.lightGray,
-  },
-
-  noteModalHeader: {
-    marginHorizontal: 15,
-    marginTop: 20,
-    alignItems: 'center',
-  },
-
-  noteModalContent: {
-    marginHorizontal: 15,
-    marginTop: 20,
-  },
-  noteInput: {
-    height: windowHeight * 0.1,
-    borderColor: colors.lightGray,
-    borderWidth: 1,
-    borderRadius: 10,
-    paddingHorizontal: 10,
-    marginBottom: 20,
-  },
-  saveNoteBtn: {
-    backgroundColor: colors.mainColor,
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-});

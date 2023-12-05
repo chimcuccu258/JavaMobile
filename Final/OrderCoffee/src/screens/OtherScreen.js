@@ -55,6 +55,44 @@ const OtherScreen = () => {
     }
   };
 
+  // const handleUpdate = async () => {
+  //   try {
+  //     const user = auth().currentUser;
+
+  //     if (user) {
+  //       const querySnapshot = await firestore()
+  //         .collection('TblUsers')
+  //         .where('phone', '==', user.phoneNumber)
+  //         .get();
+
+  //       if (!querySnapshot.empty) {
+  //         const docRef = querySnapshot.docs[0].ref;
+  //         const userData = {
+  //           lastName,
+  //           firstName,
+  //         };
+
+  //         await docRef.update(userData);
+
+  //         Alert.alert('Thông báo', 'Cập nhật thông tin thành công 🎉', [
+  //           {
+  //             text: 'OK',
+  //             onPress: () => console.log('OK Pressed'),
+  //           },
+  //         ]);
+
+  //         setIsButtonActive(false); 
+  //       } else {
+  //         console.error('No user data found');
+  //       }
+  //     } else {
+  //       console.error('No user found');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error updating data:', error);
+  //   }
+  // };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}></View>

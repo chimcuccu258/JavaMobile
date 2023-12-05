@@ -16,12 +16,12 @@ import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 
-const News = ({newsData, newsImages}) => {
+const News = props => {
   const navigation = useNavigation();
 
-  const matchedNews = newsData.map((news, index) => ({
+  const matchedNews = props.newsData.map((news, index) => ({
     ...news,
-    imageUrl: newsImages[index],
+    imageUrl: props.newsImages[index],
   }));
 
   return (
@@ -31,10 +31,7 @@ const News = ({newsData, newsImages}) => {
         <TouchableOpacity
           activeOpacity={0.5}
           onPress={() =>
-            navigation.navigate('NewsExpand', {
-              newsData,
-              newsImages,
-            })
+            navigation.navigate('NewsExpand', props)
           }
           style={{flexDirection: 'row', alignContent: 'center'}}>
           <Text style={{color: colors.mainColor, fontWeight: '500'}}>

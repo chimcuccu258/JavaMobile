@@ -15,14 +15,12 @@ import {firebase} from '@react-native-firebase/auth';
 import FastImage from 'react-native-fast-image';
 import advertisement from '../assets/advertisement';
 
-const Advertisement = ({ userData, images,
-  // advertisement
-}) => {
+const Advertisement = props => {
   const navigation = useNavigation();
 
   return (
     <FlatList
-      data={images}
+      data={props.images}
       keyExtractor={(item, index) => index.toString()}
       // keyExtractor={item => item.id}
       horizontal
@@ -31,8 +29,8 @@ const Advertisement = ({ userData, images,
       style={styles.container}
       renderItem={({item}) => (
         <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() => navigation.navigate('Order', userData)}>
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate('Order', props)}>
           <FastImage
             source={{uri: item}}
             // source={item.image}
@@ -58,6 +56,5 @@ const styles = StyleSheet.create({
     height: windowHeight * 0.245,
     borderRadius: 10,
     marginHorizontal: windowWidth * 0.03,
-    backgroundColor: 'pink',
   },
 });

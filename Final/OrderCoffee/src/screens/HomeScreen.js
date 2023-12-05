@@ -42,7 +42,6 @@ const HomeScreen = ({route}) => {
     setIsLoading(true);
     try {
       await fetchData();
-      // await fetchNewsData();
     } catch (error) {
       console.error('Error refreshing data:', error);
     } finally {
@@ -53,7 +52,6 @@ const HomeScreen = ({route}) => {
 
   useEffect(() => {
     fetchData();
-    // fetchNewsData();
   }, []);
 
   const fetchData = async () => {

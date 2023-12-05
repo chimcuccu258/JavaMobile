@@ -22,7 +22,6 @@ import firestore from '@react-native-firebase/firestore';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import LottieView from 'lottie-react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import advertisement from '../assets/advertisement';
 
 const HomeScreen = ({route}) => {
   const navigation = useNavigation();
@@ -43,7 +42,7 @@ const HomeScreen = ({route}) => {
     setIsLoading(true);
     try {
       await fetchData();
-      await fetchNewsData();
+      // await fetchNewsData();
     } catch (error) {
       console.error('Error refreshing data:', error);
     } finally {
@@ -54,7 +53,7 @@ const HomeScreen = ({route}) => {
 
   useEffect(() => {
     fetchData();
-    fetchNewsData();
+    // fetchNewsData();
   }, []);
 
   const fetchData = async () => {
@@ -72,6 +71,8 @@ const HomeScreen = ({route}) => {
           setUserData(userData);
         }
       }
+
+      // ADVERTISMENT
       // lấy hình từ AsyncStorage nếu có
       const cachedImages = await AsyncStorage.getItem('cachedImages');
 
@@ -89,15 +90,8 @@ const HomeScreen = ({route}) => {
         setImages(urls);
       }
 
-      setIsLoading(false);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setIsLoading(false);
-    }
-  };
-
-  const fetchNewsData = async () => {
-    try {
+      // NEWS
+      // lấy doc
       const snapshot = await firestore().collection('TblNews').get();
       const newsArray = snapshot.docs.map(doc => doc.data());
       setNewsData(newsArray);
@@ -118,8 +112,11 @@ const HomeScreen = ({route}) => {
         await AsyncStorage.setItem('cacheNewsImage', JSON.stringify(urls));
         setNewsImages(urls);
       }
+
+      setIsLoading(false);
     } catch (error) {
-      console.error('Error fetching news data:', error);
+      console.error('Error fetching data:', error);
+      setIsLoading(false);
     }
   };
 

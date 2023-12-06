@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {windowHeight, windowWidth} from '../utils/dimession';
 import {colors} from '../assets/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -30,6 +30,25 @@ const OtherScreen = () => {
         console.log(error);
       });
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchDataOnFocus = async () => {
+        // setRefreshing(true);
+        // setIsLoading(true);
+        try {
+          await fetchData();
+        } catch (error) {
+          console.error('Error fetching data on focus:', error);
+        } finally {
+          // setIsLoading(false);
+          // setRefreshing(false);
+        }
+      };
+
+      fetchDataOnFocus();
+    }, []),
+  );
 
   useEffect(() => {
     fetchData();
@@ -81,7 +100,7 @@ const OtherScreen = () => {
   //           },
   //         ]);
 
-  //         setIsButtonActive(false); 
+  //         setIsButtonActive(false);
   //       } else {
   //         console.error('No user data found');
   //       }

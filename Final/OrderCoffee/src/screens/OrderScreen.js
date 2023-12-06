@@ -36,6 +36,7 @@ import Animated, {
 import formatPrice from '../utils/formatPrice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../assets/orderScreenStyle';
+import CartModal from '../components/CartModal';
 
 const OrderScreen = () => {
   const navigation = useNavigation();
@@ -55,7 +56,6 @@ const OrderScreen = () => {
 
   const closeNoteModal = () => {
     setNoteModalVisible(false);
-    setNoteText('');
   };
 
   const handleNoteSave = () => {
@@ -124,6 +124,8 @@ const OrderScreen = () => {
   const closeModal = () => {
     setIsModalVisible(false);
     setShowFullDescription(false);
+    setNoteText('');
+    setQuantity(1);
   };
 
   const onRefresh = async () => {
@@ -213,6 +215,16 @@ const OrderScreen = () => {
           </>
         )}
       </ScrollView>
+
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 30,
+          right: 30,
+        }}>
+        <CartModal />
+      </View>
+
       {isModalVisible ? (
         <GestureDetector gesture={gesture}>
           <Modal

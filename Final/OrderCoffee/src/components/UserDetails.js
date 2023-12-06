@@ -29,10 +29,9 @@ const UserDetails = ({ route }) => {
 
   const [firstName, setFirstName] = useState(userData.firstName || '');
   const [lastName, setLastName] = useState(userData.lastName || '');
-
-  // const [firstName, setFirstName] = useState(userData.firstName || '');
-  // const [lastName, setLastName] = useState(userData.lastName || '');
+  const [address, setAddress] = useState(userData.address || '');
   const [isButtonActive, setIsButtonActive] = useState(false);
+  const [updatedAt, setUpdatedAt] = useState(userData.updatedAt || null);
 
 
   const handleFirstNameChange = text => {
@@ -42,6 +41,11 @@ const UserDetails = ({ route }) => {
 
   const handleLastNameChange = text => {
     setLastName(text);
+    setIsButtonActive(true);
+  };
+
+  const handleAddressChange = text => {
+    setAddress(text);
     setIsButtonActive(true);
   };
 
@@ -60,6 +64,8 @@ const handleUpdate = async () => {
         const userData = {
           firstName,
           lastName,
+          address,
+          updatedAt: firestore.FieldValue.serverTimestamp(),
         };
 
         await docRef.update(userData);
@@ -67,11 +73,14 @@ const handleUpdate = async () => {
         Alert.alert('Thông báo', 'Cập nhật thông tin thành công 🎉', [
           {
             text: 'OK',
-            onPress: () => console.log('OK Pressed'),
+            onPress: () => {
+              setIsButtonActive(false);
+              navigation.goBack(); 
+            },
           },
         ]);
 
-        setIsButtonActive(false); // Reset button state after successful update
+        setIsButtonActive(false); 
       } else {
         console.error('No user data found');
       }
@@ -103,20 +112,25 @@ const handleUpdate = async () => {
       <>
         <ScrollView style={styles.body}>
           <TouchableOpacity activeOpacity={0.5} style={styles.inputField}>
-            <TextInput value={firstName} onChangeText={handleFirstNameChange}>
-              {userData.firstName}
-            </TextInput>
+            <TextInput value={firstName} onChangeText={handleFirstNameChange} />
           </TouchableOpacity>
+
           <TouchableOpacity activeOpacity={0.5} style={styles.inputField}>
-            <TextInput value={lastName} onChangeText={handleLastNameChange}>
-              {userData.lastName}
-            </TextInput>
+            <TextInput value={lastName} onChangeText={handleLastNameChange} />
           </TouchableOpacity>
+
+          <TouchableOpacity
+            activeOpacity={0.5}
+            style={[styles.inputField, {backgroundColor: '#dddddd'}]}>
+            <TextInput editable={false}>{userData.phone}</TextInput>
+          </TouchableOpacity>
+
           <TouchableOpacity
             activeOpacity={0.5}
             style={[styles.inputField, {backgroundColor: '#dddddd'}]}>
             <TextInput editable={false}>{userData.email}</TextInput>
           </TouchableOpacity>
+
           <TouchableOpacity
             activeOpacity={0.5}
             style={[styles.inputField, {backgroundColor: '#dddddd'}]}>
@@ -134,11 +148,16 @@ const handleUpdate = async () => {
               />
             </View>
           </TouchableOpacity>
+
           <TouchableOpacity
             activeOpacity={0.5}
             editable={false}
-            style={styles.inputField}>
+            style={[styles.inputField, {backgroundColor: '#dddddd'}]}>
             <Text>{userData.gender ? 'Nữ' : 'Nam'}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity activeOpacity={0.5} style={styles.inputField}>
+            <TextInput value={address} onChangeText={handleAddressChange}/>
           </TouchableOpacity>
 
           <TouchableOpacity

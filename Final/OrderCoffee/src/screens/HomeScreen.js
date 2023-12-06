@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet, Image, RefreshControl} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import WeatherIcon from '../components/WeatherIcon';
 import {windowHeight, windowWidth} from '../utils/dimession';
 import {colors} from '../assets/colors';
@@ -49,6 +49,26 @@ const HomeScreen = ({route}) => {
       setRefreshing(false);
     }
   };
+
+  // tự động refresh khi focus
+  useFocusEffect(
+    useCallback(() => {
+      const fetchDataOnFocus = async () => {
+        // setRefreshing(true);
+        setIsLoading(true);
+        try {
+          await fetchData();
+        } catch (error) {
+          console.error('Error fetching data on focus:', error);
+        } finally {
+          setIsLoading(false);
+          // setRefreshing(false);
+        }
+      };
+
+      fetchDataOnFocus();
+    }, []),
+  );
 
   useEffect(() => {
     fetchData();

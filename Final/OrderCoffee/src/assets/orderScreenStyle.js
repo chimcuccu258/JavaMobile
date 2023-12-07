@@ -114,6 +114,14 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
   },
+  cartModal: {
+    position: 'absolute',
+    bottom: 20,
+    right: 30,
+    backgroundColor: colors.mainColor,
+    paddingVertical: 5,
+    borderRadius: 20,
+  },
 });
 
 export default styles;

@@ -17,6 +17,7 @@ import NewsDetails from '../components/NewsDetails';
 import NewsExpand from '../components/NewsExpand';
 import UserDetails from '../components/UserDetails';
 import Setting from '../screens/Setting';
+import SignUp from '../screens/SignUp';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -138,6 +139,14 @@ const MainNavigation = () => {
           headerLeft: null,
         }}
         component={Authentication}
+      />
+
+      <Stack.Screen
+        name="SignUp"
+        options={{
+          headerShown: false,
+        }}
+        component={SignUp}
       />
 
       <Stack.Screen

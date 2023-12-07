@@ -46,9 +46,13 @@ const OrderScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-
   const [noteModalVisible, setNoteModalVisible] = useState(false);
   const [noteText, setNoteText] = useState('');
+  const [quantity, setQuantity] = useState(1);
+  const [cartShowVisible, setcartShowVisible] = useState(false);
+  const [cartQuantity, setCartQuantity] = useState(0);
+  const [cartPrice, setCartPrice] = useState(0);
+  const [quantities, setQuantities] = useState({});
 
   const handleNoteBoxPress = () => {
     setNoteModalVisible(true);
@@ -63,9 +67,6 @@ const OrderScreen = () => {
     closeNoteModal();
   };
 
-  // const quantity = 1;
-  const [quantity, setQuantity] = useState(1);
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -74,7 +75,7 @@ const OrderScreen = () => {
     try {
       setIsLoading(true);
 
-      // lấy hình từ AsyncStorage nếu có  
+      // lấy hình từ AsyncStorage nếu có
       const cachedMenus = await AsyncStorage.getItem('cachedMenus');
       const cachedImages = await AsyncStorage.getItem('cachedMenuImages');
 
@@ -108,12 +109,16 @@ const OrderScreen = () => {
   };
 
   const handleProductPress = (product, index) => {
+    const initialQuantity = quantities[product.title] || 1;
+
     setSelectedProduct({
       title: product.title,
       image: images[index],
       description: product.description,
       price: product.price,
     });
+
+    setQuantity(initialQuantity);
     setIsModalVisible(true);
   };
 
@@ -125,7 +130,8 @@ const OrderScreen = () => {
     setIsModalVisible(false);
     setShowFullDescription(false);
     setNoteText('');
-    setQuantity(1);
+    // setQuantity(1);
+    setQuantity(prevQuantity => prevQuantity || initialQuantity);
   };
 
   const onRefresh = async () => {
@@ -169,7 +175,7 @@ const OrderScreen = () => {
   const toggleDescription = () => {
     setShowFullDescription(!showFullDescription);
   };
-  
+
   const handleIncrease = () => {
     if (quantity < 10) {
       setQuantity(prevQuantity => prevQuantity + 1);
@@ -180,6 +186,21 @@ const OrderScreen = () => {
     if (quantity > 1) {
       setQuantity(prevQuantity => prevQuantity - 1);
     }
+  };
+
+  const handleOrderBtnPress = () => {
+    const total = selectedProduct.price * quantity;
+
+    setCartQuantity(quantity);
+    setCartPrice(total);
+
+    setQuantities(prevQuantities => ({
+      ...prevQuantities,
+      [selectedProduct.title]: quantity,
+    }));
+
+    setIsModalVisible(false);
+    setcartShowVisible(true);
   };
 
   return (
@@ -216,14 +237,18 @@ const OrderScreen = () => {
         )}
       </ScrollView>
 
-      <View
+      {/* <View
         style={{
           position: 'absolute',
-          bottom: 30,
+          bottom: 20,
           right: 30,
+          backgroundColor: colors.mainColor,
+          paddingVertical: 5,
+          // paddingHorizontal: 20,
+          borderRadius: 20,
         }}>
         <CartModal />
-      </View>
+      </View> */}
 
       {isModalVisible ? (
         <GestureDetector gesture={gesture}>
@@ -355,7 +380,9 @@ const OrderScreen = () => {
                     <AntDesign name="plus" size={20} color={colors.mainColor} />
                   </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.orderBtn}>
+                <TouchableOpacity
+                  style={styles.orderBtn}
+                  onPress={handleOrderBtnPress}>
                   <Text style={styles.orderBtnText}>
                     Chọn {formatPrice(selectedProduct?.price)}đ
                   </Text>
@@ -364,6 +391,46 @@ const OrderScreen = () => {
             </View>
           </Modal>
         </GestureDetector>
+      ) : null}
+
+      {cartShowVisible ? (
+        <TouchableOpacity
+          activeOpacity={0.9}
+          style={{
+            position: 'absolute',
+            bottom: 20,
+            right: 30,
+            backgroundColor: colors.mainColor,
+            paddingVertical: 5,
+            borderRadius: 20,
+            flexDirection: 'row',
+          }}>
+          <View
+            style={{
+              backgroundColor: colors.white,
+              width: 25,
+              height: 25,
+              borderRadius: 25,
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginLeft: 5,
+            }}>
+            <Text style={{fontSize: 13, color: colors.mainColor}}>
+              {cartQuantity}
+            </Text>
+          </View>
+          <View
+            style={{
+              marginLeft: 10,
+              justifyContent: 'center',
+              marginRight: 15,
+            }}>
+            <Text
+              style={{fontSize: 14, color: colors.white, fontWeight: 'bold'}}>
+              {formatPrice(cartPrice)}đ
+            </Text>
+          </View>
+        </TouchableOpacity>
       ) : null}
     </>
   );

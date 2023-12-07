@@ -1,16 +1,18 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
+import {View, Text, StyleSheet} from 'react-native';
+import React from 'react';
+import {colors} from '../assets/colors';
+import formatPrice from '../utils/formatPrice';
 
-const CartModal = () => {
+const CartModal = props => {
   return (
-    <View>
-      <Text>CartModal</Text>
-    </View>
-  )
-}
+    <Modal>
 
-export default CartModal
+    </Modal>
+  );
+};
+
+export default CartModal;
 
 const styles = StyleSheet.create({
-  
-})
+
+});

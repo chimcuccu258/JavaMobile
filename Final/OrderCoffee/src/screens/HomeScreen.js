@@ -61,7 +61,7 @@ const HomeScreen = ({route}) => {
         } catch (error) {
           console.error('Error fetching data on focus:', error);
         } finally {
-          setIsLoading(false);
+          // setIsLoading(false);
           // setRefreshing(false);
         }
       };

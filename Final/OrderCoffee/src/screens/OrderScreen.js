@@ -46,26 +46,17 @@ const OrderScreen = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-  const [noteModalVisible, setNoteModalVisible] = useState(false);
-  const [noteText, setNoteText] = useState('');
+
   const [quantity, setQuantity] = useState(1);
-  const [cartShowVisible, setcartShowVisible] = useState(false);
+  const [cartShowVisible, setCartShowVisible] = useState(false);
   const [cartQuantity, setCartQuantity] = useState(0);
   const [cartPrice, setCartPrice] = useState(0);
   const [quantities, setQuantities] = useState({});
-
-  const handleNoteBoxPress = () => {
-    setNoteModalVisible(true);
-  };
-
-  const closeNoteModal = () => {
-    setNoteModalVisible(false);
-  };
-
-  const handleNoteSave = () => {
-    console.log('Note saved:', noteText);
-    closeNoteModal();
-  };
+  const [isShowCartModal, setIsShowCartModal] = useState(false);
+  const [userData, setUserData] = useState({
+    firstName: null,
+    lastName: null,
+  });
 
   useEffect(() => {
     fetchData();
@@ -75,7 +66,20 @@ const OrderScreen = () => {
     try {
       setIsLoading(true);
 
-      // lấy hình từ AsyncStorage nếu có
+      const user = firebase.auth().currentUser;
+
+      if (user) {
+        const querySnapshot = await firestore()
+          .collection('TblUsers')
+          .where('phone', '==', user.phoneNumber)
+          .get();
+
+        if (!querySnapshot.empty) {
+          const userData = querySnapshot.docs[0].data();
+          setUserData(userData);
+        }
+      }
+
       const cachedMenus = await AsyncStorage.getItem('cachedMenus');
       const cachedImages = await AsyncStorage.getItem('cachedMenuImages');
 
@@ -84,7 +88,6 @@ const OrderScreen = () => {
         setImages(JSON.parse(cachedImages));
         setIsLoading(false);
       } else {
-        // ko có thì lấy từ firestore & storage
         const snapshot = await firestore().collection('TblMenus').get();
         const menuArrays = snapshot.docs.map(doc => doc.data());
         setMenus(menuArrays);
@@ -95,7 +98,6 @@ const OrderScreen = () => {
         );
         setImages(urls);
 
-        // lưu lại mai dùng tiếp
         await AsyncStorage.setItem('cachedMenus', JSON.stringify(menuArrays));
         await AsyncStorage.setItem('cachedMenuImages', JSON.stringify(urls));
 
@@ -122,15 +124,24 @@ const OrderScreen = () => {
     setIsModalVisible(true);
   };
 
-  const handlePlusIconPress = items => {
-    console.log('items', items);
+  const handlePlusIconPress = (product, index) => {
+    const updatedQuantity = (quantities[product.title] || 0) + 1;
+
+    setQuantities(prevQuantities => ({
+      ...prevQuantities,
+      [product.title]: updatedQuantity,
+    }));
+
+    setCartQuantity(prevQuantity => prevQuantity + 1);
+    setCartPrice(prevPrice => prevPrice + product.price);
+    setCartShowVisible(true);
   };
 
   const closeModal = () => {
     setIsModalVisible(false);
+    setIsShowCartModal(false);
     setShowFullDescription(false);
-    setNoteText('');
-    // setQuantity(1);
+
     setQuantity(prevQuantity => prevQuantity || initialQuantity);
   };
 
@@ -191,16 +202,36 @@ const OrderScreen = () => {
   const handleOrderBtnPress = () => {
     const total = selectedProduct.price * quantity;
 
-    setCartQuantity(quantity);
-    setCartPrice(total);
+    if (quantities[selectedProduct.title]) {
+      const updatedQuantity = quantities[selectedProduct.title] + quantity;
 
-    setQuantities(prevQuantities => ({
-      ...prevQuantities,
-      [selectedProduct.title]: quantity,
-    }));
+      setCartQuantity(cartQuantity + quantity);
+      setCartPrice(cartPrice + total);
+
+      setQuantities(prevQuantities => ({
+        ...prevQuantities,
+        [selectedProduct.title]: updatedQuantity,
+      }));
+    } else {
+      setCartQuantity(cartQuantity + quantity);
+      setCartPrice(cartPrice + total);
+
+      setQuantities(prevQuantities => ({
+        ...prevQuantities,
+        [selectedProduct.title]: quantity,
+      }));
+    }
 
     setIsModalVisible(false);
-    setcartShowVisible(true);
+    setCartShowVisible(true);
+  };
+
+  const clearCart = () => {
+    setQuantities({});
+    setCartQuantity(0);
+    setCartPrice(0);
+    setIsShowCartModal(false);
+    setCartShowVisible(false);
   };
 
   return (
@@ -229,27 +260,11 @@ const OrderScreen = () => {
               images={images}
               onProductPress={handleProductPress}
               onPlusIconPress={handlePlusIconPress}
-              // increase={handleIncrease}
-              // decrease={handleDecrease}
               quantity={quantity}
             />
           </>
         )}
       </ScrollView>
-
-      {/* <View
-        style={{
-          position: 'absolute',
-          bottom: 20,
-          right: 30,
-          backgroundColor: colors.mainColor,
-          paddingVertical: 5,
-          // paddingHorizontal: 20,
-          borderRadius: 20,
-        }}>
-        <CartModal />
-      </View> */}
-
       {isModalVisible ? (
         <GestureDetector gesture={gesture}>
           <Modal
@@ -288,65 +303,6 @@ const OrderScreen = () => {
                     {showFullDescription ? 'Rút gọn' : 'Xem thêm'}
                   </Text>
                 </TouchableOpacity>
-                <View style={styles.note}>
-                  <Text style={styles.noteTitle}>Yêu cầu khác</Text>
-                  <Text style={styles.noteContent}>
-                    Nhập yêu cầu của bạn tại đây
-                  </Text>
-                  <TouchableOpacity
-                    activeOpacity={0.5}
-                    onPress={handleNoteBoxPress}
-                    style={styles.noteBox}>
-                    <Text style={{color: colors.darkGray}}>Thêm ghi chú</Text>
-                  </TouchableOpacity>
-                  {noteModalVisible ? (
-                    <Modal
-                      visible={noteModalVisible}
-                      onRequestClose={closeNoteModal}
-                      style={[
-                        {
-                          height: windowHeight / 2,
-                        },
-                        viewStyleAnim,
-                      ]}
-                      animationType="slide"
-                      presentationStyle="pageSheet">
-                      <Animated.ScrollView>
-                        <View style={styles.noteModalHeader}>
-                          <Text style={styles.noteTitle}>Ghi chú</Text>
-                        </View>
-                        <View style={styles.noteModalContent}>
-                          <TextInput
-                            style={styles.noteInput}
-                            placeholder="Nhập ghi chú của bạn"
-                            multiline
-                            value={noteText.toString()}
-                            onChangeText={text => setNoteText(text)}
-                          />
-                          <TouchableOpacity
-                            activeOpacity={0.5}
-                            onPress={handleNoteSave}
-                            style={styles.saveNoteBtn}>
-                            <Text
-                              style={{color: colors.white, fontWeight: 'bold'}}>
-                              Nhập
-                            </Text>
-                          </TouchableOpacity>
-                        </View>
-                      </Animated.ScrollView>
-                      <TouchableOpacity
-                        activeOpacity={0.5}
-                        onPress={closeNoteModal}
-                        style={styles.closeBtn}>
-                        <AntDesign
-                          name="close"
-                          size={22}
-                          color={colors.white}
-                        />
-                      </TouchableOpacity>
-                    </Modal>
-                  ) : null}
-                </View>
               </View>
             </Animated.ScrollView>
             <TouchableOpacity
@@ -396,15 +352,8 @@ const OrderScreen = () => {
       {cartShowVisible ? (
         <TouchableOpacity
           activeOpacity={0.9}
-          style={{
-            position: 'absolute',
-            bottom: 20,
-            right: 30,
-            backgroundColor: colors.mainColor,
-            paddingVertical: 5,
-            borderRadius: 20,
-            flexDirection: 'row',
-          }}>
+          onPress={() => setIsShowCartModal(true)}
+          style={styles.cartModal}>
           <View
             style={{
               backgroundColor: colors.white,
@@ -431,6 +380,33 @@ const OrderScreen = () => {
             </Text>
           </View>
         </TouchableOpacity>
+      ) : null}
+
+      {isShowCartModal ? (
+        <GestureDetector gesture={gesture}>
+          <Modal
+            visible={isShowCartModal}
+            onRequestClose={closeModal}
+            style={[
+              {
+                height: windowHeight,
+              },
+              viewStyleAnim,
+            ]}
+            animationType="slide"
+            presentationStyle="pageSheet">
+            <CartModal
+              cartQuantity={cartQuantity}
+              cartPrice={cartPrice}
+              closeModal={closeModal}
+              quantities={quantities}
+              menus={menus}
+              images={images}
+              userData={userData}
+              onDelete={clearCart}
+            />
+          </Modal>
+        </GestureDetector>
       ) : null}
     </>
   );

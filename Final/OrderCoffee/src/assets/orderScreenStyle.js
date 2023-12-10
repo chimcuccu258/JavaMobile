@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     paddingTop: 20,
+    backgroundColor: 'white',
   },
   optionBtnContainer: {
     flexDirection: 'row',
@@ -121,6 +122,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.mainColor,
     paddingVertical: 5,
     borderRadius: 20,
+    flexDirection: 'row',
   },
 });
 

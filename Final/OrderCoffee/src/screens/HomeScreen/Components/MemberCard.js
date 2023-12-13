@@ -1,6 +1,6 @@
 import {View, Text, StyleSheet, ImageBackground} from 'react-native';
 import React from 'react';
-import {windowHeight, windowWidth} from '../utils/dimession';
+import {windowHeight, windowWidth} from '../../../utils/dimession';
 import LinearGradient from 'react-native-linear-gradient';
 import Svg, {Image} from 'react-native-svg';
 
@@ -15,7 +15,7 @@ const MemberCard = ({userData}) => {
       angleCenter={{x: 0.3, y: 0.5}}
       style={styles.container}>
       <ImageBackground
-        source={require('../assets/images/vector2.png')}
+        source={require('../../../assets/images/vector2.png')}
         style={{
           width: '100%',
           height: '100%',

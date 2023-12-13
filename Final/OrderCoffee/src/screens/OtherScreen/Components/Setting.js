@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {windowHeight, windowWidth} from '../utils/dimession';
-import {colors} from '../assets/colors';
+import {windowHeight, windowWidth} from '../../../utils/dimession';
+import {colors} from '../../../assets/colors';
 import storage from '@react-native-firebase/storage';
 import {firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';

@@ -2,22 +2,23 @@ import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import HomeScreen from '../screens/HomeScreen';
+import HomeScreen from '../screens/HomeScreen/HomeScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
-import IndexScreen from '../screens/IndexScreen';
+import IndexScreen from '../screens/AuthScreen/IndexScreen';
 import {getItem} from '../utils/asyncStorage';
-import Authentication from '../screens/Authentication';
-import OtherScreen from '../screens/OtherScreen';
-import OrderScreen from '../screens/OrderScreen';
-import PreferentialScreen from '../screens/PreferentialScreen';
+import Authentication from '../screens/AuthScreen/Authentication';
+import OtherScreen from '../screens/OtherScreen/OtherScreen';
+import OrderScreen from '../screens/OrderScreen/OrderScreen';
+import PreferentialScreen from '../screens/TrackingScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {colors} from '../assets/colors';
 import {windowWidth} from '../utils/dimession';
-import NewsDetails from '../components/NewsDetails';
-import NewsExpand from '../components/NewsExpand';
-import UserDetails from '../components/UserDetails';
-import Setting from '../screens/Setting';
-import SignUp from '../screens/SignUp';
+import NewsDetails from '../screens/HomeScreen/Components/NewsDetails';
+import NewsExpand from '../screens/HomeScreen/Components/NewsExpand';
+import UserDetails from '../screens/OtherScreen/Components/UserDetails';
+import Setting from '../screens/OtherScreen/Components/Setting';
+import SignUp from '../screens/AuthScreen/SignUp';
+import TrackingScreen from '../screens/TrackingScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -33,10 +34,10 @@ const TabControl = () => {
             iconName = focused ? 'home-variant' : 'home-variant-outline';
           } else if (route.name === 'Order') {
             iconName = focused ? 'shopping' : 'shopping-outline';
-          } else if (route.name === 'Preferential') {
+          } else if (route.name === 'Tracking') {
             iconName = focused
-              ? 'ticket-confirmation'
-              : 'ticket-confirmation-outline';
+              ? 'chart-timeline-variant'
+              : 'chart-timeline-variant';
           } else if (route.name === 'Other') {
             iconName = 'menu';
           }
@@ -73,12 +74,12 @@ const TabControl = () => {
         }}
       />
       <Tab.Screen
-        name="Preferential"
-        component={PreferentialScreen}
+        name="Tracking"
+        component={TrackingScreen}
         options={{
           headerShown: false,
-          headerTitle: 'Ưu đãi của bạn',
-          tabBarLabel: 'Ưu đãi',
+          headerTitle: 'Đơn hàng của bạn',
+          tabBarLabel: 'Đơn hàng',
         }}
       />
       <Tab.Screen

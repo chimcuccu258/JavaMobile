@@ -12,7 +12,7 @@ import {windowWidth, windowHeight} from '../utils/dimession';
 import {colors} from '../assets/colors';
 import firestore from '@react-native-firebase/firestore';
 
-const MenuList = ({ menus }) => {
+const MenuList = ({menus}) => {
   const uniqueListTitles = new Set();
 
   const uniqueMenus = menus.filter(item => {

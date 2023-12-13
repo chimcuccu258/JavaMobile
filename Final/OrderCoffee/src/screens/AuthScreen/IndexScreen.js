@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import PhoneInput from 'react-native-phone-number-input';
-import {colors} from '../assets/colors';
-import {windowHeight, windowWidth} from '../utils/dimession';
+import {colors} from '../../assets/colors';
+import {windowHeight, windowWidth} from '../../utils/dimession';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 
@@ -36,12 +36,12 @@ const IndexScreen = ({props}) => {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require('../assets/images/background_1.jpg')}
+        source={require('../../assets/images/background_1.jpg')}
         resizeMode="cover"
         blurRadius={3.5}
         style={styles.image}>
         <Image
-          source={require('../assets/images/logo_color.png')}
+          source={require('../../assets/images/logo_color.png')}
           style={{width: '40%', height: '20%', resizeMode: 'contain'}}
         />
         <View style={styles.title}>
@@ -99,7 +99,7 @@ const IndexScreen = ({props}) => {
         <TouchableOpacity style={styles.btn1} activeOpacity={0.5}>
           <View style={styles.btnContent}>
             <Image
-              source={require('../assets/images/apple3.png')}
+              source={require('../../assets/images/apple3.png')}
               style={styles.appleImage}
             />
             <Text style={styles.btnText}>Tiếp tục bằng Apple</Text>
@@ -108,7 +108,7 @@ const IndexScreen = ({props}) => {
         <TouchableOpacity style={styles.btn2} activeOpacity={0.5}>
           <View style={styles.btnContent}>
             <Image
-              source={require('../assets/images/facebook(@3×).png')}
+              source={require('../../assets/images/facebook(@3×).png')}
               style={styles.appleImage}
             />
             <Text style={styles.btnText}>Tiếp tục bằng Facebook</Text>
@@ -117,7 +117,7 @@ const IndexScreen = ({props}) => {
         <TouchableOpacity style={styles.btn3} activeOpacity={0.5}>
           <View style={styles.btnContent}>
             <Image
-              source={require('../assets/images/google3.png')}
+              source={require('../../assets/images/google3.png')}
               style={styles.appleImage}
             />
             <Text style={styles.btnText}>Tiếp tục bằng Google</Text>

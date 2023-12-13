@@ -1,18 +1,18 @@
 import {View, Text, StyleSheet, Image, RefreshControl} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import WeatherIcon from '../components/WeatherIcon';
-import {windowHeight, windowWidth} from '../utils/dimession';
-import {colors} from '../assets/colors';
-import MemberCard from '../components/MemberCard';
+import WeatherIcon from '../../components/WeatherIcon';
+import {windowHeight, windowWidth} from '../../utils/dimession';
+import {colors} from '../../assets/colors';
+import MemberCard from './Components/MemberCard';
 import Animated, {
   useSharedValue,
   withTiming,
   useAnimatedStyle,
   Easing,
 } from 'react-native-reanimated';
-import Advertisement from '../components/Advertisement';
-import News from '../components/News';
+import Advertisement from './Components/Advertisement';
+import News from './Components/News';
 import {ActivityIndicator} from 'react-native';
 import {ScrollView} from 'react-native-virtualized-view';
 import {firebase} from '@react-native-firebase/auth';
@@ -159,7 +159,7 @@ const HomeScreen = ({route}) => {
         {isLoading || refreshing ? (
           <View style={styles.loadingContainer}>
             <LottieView
-              source={require('../assets/animations/christmas.json')}
+              source={require('../../assets/animations/christmas.json')}
               style={{width: windowWidth * 0.5, height: windowWidth * 0.5}}
               autoPlay
               loop

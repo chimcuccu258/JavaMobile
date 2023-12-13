@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {windowHeight, windowWidth} from '../utils/dimession';
-import {colors} from '../assets/colors';
+import {windowHeight, windowWidth} from '../../../utils/dimession';
+import {colors} from '../../../assets/colors';
 import storage from '@react-native-firebase/storage';
 import {firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -23,16 +23,15 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {ActionSheetCustom as ActionSheet} from 'react-native-actionsheet';
 import {ScrollView} from 'react-native-virtualized-view';
 
-const UserDetails = ({ route }) => {
+const UserDetails = ({route}) => {
   const navigation = useNavigation();
-  const { userData } = route.params;
+  const {userData} = route.params;
 
   const [firstName, setFirstName] = useState(userData.firstName || '');
   const [lastName, setLastName] = useState(userData.lastName || '');
   const [address, setAddress] = useState(userData.address || '');
   const [isButtonActive, setIsButtonActive] = useState(false);
   const [updatedAt, setUpdatedAt] = useState(userData.updatedAt || null);
-
 
   const handleFirstNameChange = text => {
     setFirstName(text);
@@ -49,48 +48,49 @@ const UserDetails = ({ route }) => {
     setIsButtonActive(true);
   };
 
-const handleUpdate = async () => {
-  try {
-    const user = auth().currentUser;
+  const handleUpdate = async () => {
+    try {
+      const user = auth().currentUser;
 
-    if (user) {
-      const querySnapshot = await firestore()
-        .collection('TblUsers')
-        .where('phone', '==', user.phoneNumber)
-        .get();
+      if (user) {
+        const querySnapshot = await firestore()
+          .collection('TblUsers')
+          .where('phone', '==', user.phoneNumber)
+          .get();
 
-      if (!querySnapshot.empty) {
-        const docRef = querySnapshot.docs[0].ref;
-        const userData = {
-          firstName,
-          lastName,
-          address,
-          updatedAt: firestore.FieldValue.serverTimestamp(),
-        };
+        if (!querySnapshot.empty) {
+          const docRef = querySnapshot.docs[0].ref;
+          const userData = {
+            firstName,
+            lastName,
+            address,
+            updatedAt: firestore.FieldValue.serverTimestamp(),
+          };
 
-        await docRef.update(userData);
+          await docRef.update(userData);
 
-        Alert.alert('Thông báo', 'Cập nhật thông tin thành công 🎉', [
-          {
-            text: 'OK',
-            onPress: () => {
-              setIsButtonActive(false);
-              navigation.goBack(); 
+          Alert.alert('Thông báo', 'Cập nhật thông tin thành công 🎉', [
+            {
+              text: 'OK',
+              onPress: () => {
+                setIsButtonActive(false);
+
+                navigation.goBack();
+              },
             },
-          },
-        ]);
+          ]);
 
-        setIsButtonActive(false); 
+          setIsButtonActive(false);
+        } else {
+          console.error('No user data found');
+        }
       } else {
-        console.error('No user data found');
+        console.error('No user found');
       }
-    } else {
-      console.error('No user found');
+    } catch (error) {
+      console.error('Error updating data:', error);
     }
-  } catch (error) {
-    console.error('Error updating data:', error);
-  }
-};
+  };
 
   return (
     <View style={styles.container}>
@@ -157,7 +157,7 @@ const handleUpdate = async () => {
           </TouchableOpacity>
 
           <TouchableOpacity activeOpacity={0.5} style={styles.inputField}>
-            <TextInput value={address} onChangeText={handleAddressChange}/>
+            <TextInput value={address} onChangeText={handleAddressChange} />
           </TouchableOpacity>
 
           <TouchableOpacity

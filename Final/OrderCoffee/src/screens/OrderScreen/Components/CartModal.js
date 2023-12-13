@@ -10,8 +10,8 @@ import {
   Alert,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {colors} from '../assets/colors';
-import formatPrice from '../utils/formatPrice';
+import {colors} from '../../../assets/colors';
+import formatPrice from '../../../utils/formatPrice';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import firestore from '@react-native-firebase/firestore';

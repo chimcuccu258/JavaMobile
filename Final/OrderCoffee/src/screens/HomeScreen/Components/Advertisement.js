@@ -8,12 +8,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {windowHeight, windowWidth} from '../utils/dimession';
+import {windowHeight, windowWidth} from '../../../utils/dimession';
 import storage from '@react-native-firebase/storage';
 import {useNavigation} from '@react-navigation/native';
 import {firebase} from '@react-native-firebase/auth';
 import FastImage from 'react-native-fast-image';
-import advertisement from '../assets/advertisement';
+import advertisement from '../../../assets/advertisement';
 
 const Advertisement = props => {
   const navigation = useNavigation();

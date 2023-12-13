@@ -1,8 +1,8 @@
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {windowHeight, windowWidth} from '../utils/dimession';
-import {colors} from '../assets/colors';
+import {windowHeight, windowWidth} from '../../utils/dimession';
+import {colors} from '../../assets/colors';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import auth from '@react-native-firebase/auth';
@@ -143,8 +143,10 @@ const OtherScreen = () => {
               <Text style={{fontSize: 14, marginLeft: 10}}>Đăng xuất</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-            <Text style={{fontSize: 14, marginLeft: 10, color: 'red'}}>đăng ký</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
+            <Text style={{fontSize: 14, marginLeft: 10, color: 'red'}}>
+              đăng ký
+            </Text>
           </TouchableOpacity>
         </View>
       </View>

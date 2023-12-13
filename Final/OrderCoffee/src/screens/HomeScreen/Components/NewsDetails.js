@@ -8,9 +8,9 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {windowHeight, windowWidth} from '../utils/dimession';
+import {windowHeight, windowWidth} from '../../../utils/dimession';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {colors} from '../assets/colors';
+import {colors} from '../../../assets/colors';
 import Share from 'react-native-share';
 import {firebase} from '@react-native-firebase/auth';
 import FastImage from 'react-native-fast-image';

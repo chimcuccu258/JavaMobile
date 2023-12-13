@@ -8,48 +8,45 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {windowHeight, windowWidth} from '../utils/dimession';
-import {colors} from '../assets/colors';
+import {windowHeight, windowWidth} from '../../../utils/dimession';
+import {colors} from '../../../assets/colors';
 import storage from '@react-native-firebase/storage';
 import {firebase} from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
 import FastImage from 'react-native-fast-image';
 
-const News = props => {
+const NewsExpand = ({route}) => {
   const navigation = useNavigation();
+  const {newsData, newsImages} = route.params;
 
-  const matchedNews = props.newsData.map((news, index) => ({
+  const matchedNews = newsData.map((news, index) => ({
     ...news,
-    imageUrl: props.newsImages[index],
+    imageUrl: newsImages[index],
   }));
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerList}>
-        <Text style={{fontWeight: '600', fontSize: 15}}>Khám phá thêm ✨</Text>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          onPress={() =>
-            navigation.navigate('NewsExpand', props)
-          }
-          style={{flexDirection: 'row', alignContent: 'center'}}>
-          <Text style={{color: colors.mainColor, fontWeight: '500'}}>
-            Xem thêm
-          </Text>
-          <Ionicons
-            name="chevron-forward-outline"
-            size={18}
-            color={colors.mainColor}
-          />
-        </TouchableOpacity>
+      <View style={styles.header}>
+        <View style={styles.headerContents}>
+          <View style={styles.headerDetails}>
+            <Text
+              style={{fontWeight: '700', fontSize: 16, textAlign: 'center'}}>
+              Khám phá thêm ✨
+            </Text>
+          </View>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => navigation.goBack()}>
+            <Ionicons name="chevron-back-outline" size={26} color="black" />
+          </TouchableOpacity>
+        </View>
       </View>
-
       <FlatList
         data={matchedNews}
         keyExtractor={(item, index) => index.toString()}
-        horizontal
-        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        numColumns={2}
         renderItem={({item}) => (
           <TouchableOpacity
             activeOpacity={0.5}
@@ -89,21 +86,34 @@ const News = props => {
   );
 };
 
-export default News;
+export default NewsExpand;
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
+    flex: 1,
+    backgroundColor: 'white',
   },
-  headerList: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    marginHorizontal: windowWidth * 0.03,
+  header: {
+    height: windowHeight * 0.1125,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#BDBDBD',
+    justifyContent: 'center',
+    alignContent: 'flex-end',
+  },
+  headerContents: {
+    marginTop: 40,
+    marginHorizontal: 15,
+    justifyContent: 'center',
+  },
+  headerDetails: {
+    width: windowWidth * 0.93,
+    justifyContent: 'center',
+    position: 'absolute',
   },
   newsBox: {
     marginTop: 15,
-    width: windowWidth * 0.35,
+    marginBottom: 20,
+    width: windowWidth * 0.45,
     height: windowHeight * 0.25,
     borderRadius: 10,
     marginLeft: windowWidth * 0.03,

@@ -10,11 +10,11 @@ import {
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import firestore from '@react-native-firebase/firestore';
-import {windowHeight, windowWidth} from '../utils/dimession';
-import {colors} from '../assets/colors';
+import {windowHeight, windowWidth} from '../../utils/dimession';
+import {colors} from '../../assets/colors';
 import FastImage from 'react-native-fast-image';
-import MenuList from '../components/MenuList';
-import ProductList from '../components/ProductList';
+import MenuList from '../../components/MenuList';
+import ProductList from '../../components/ProductList';
 import {ScrollView} from 'react-native-virtualized-view';
 import {ActivityIndicator} from 'react-native';
 import storage from '@react-native-firebase/storage';
@@ -33,10 +33,10 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import formatPrice from '../utils/formatPrice';
+import formatPrice from '../../utils/formatPrice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import styles from '../assets/orderScreenStyle';
-import CartModal from '../components/CartModal';
+import styles from '../../assets/orderScreenStyle';
+import CartModal from './Components/CartModal';
 
 const OrderScreen = () => {
   const navigation = useNavigation();
@@ -245,7 +245,7 @@ const OrderScreen = () => {
         {isLoading || refreshing ? (
           <View style={styles.loadingContainer}>
             <LottieView
-              source={require('../assets/animations/christmas.json')}
+              source={require('../../assets/animations/christmas.json')}
               style={{width: windowWidth * 0.5, height: windowWidth * 0.5}}
               autoPlay
               loop

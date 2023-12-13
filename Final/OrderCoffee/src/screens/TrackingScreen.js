@@ -5,22 +5,18 @@ import { ScrollView } from 'react-native-virtualized-view';
 import { windowHeight, windowWidth } from '../utils/dimession';
 import { colors } from '../assets/colors';
 
-const PreferentialScreen = ({route, navigation}) => {
+const TrackingScreen = ({route, navigation}) => {
   return (
     <>
-      <ScrollView style={styles.container}>
-        <View style={styles.card}>
-
-        </View>
-        <View>
-
-        </View>
-      </ScrollView>
+      {/* <ScrollView style={styles.container}>
+        <View style={styles.card}></View>
+        <View></View>
+      </ScrollView> */}
     </>
   );
 };
 
-export default PreferentialScreen
+export default TrackingScreen;
 
 const styles = StyleSheet.create({
   container: {

@@ -1,20 +1,38 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Dimensions, Image} from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  Image,
+  Text,
+  ScrollView,
+} from 'react-native';
 import MapView, {Marker, Polyline} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
 import Biker from '../assets/svg/Biker';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {windowHeight, windowWidth} from '../utils/dimession';
+import {colors} from '../assets/colors';
+import StepIndicator from 'react-native-step-indicator';
+import firestore from '@react-native-firebase/firestore';
+import {firebase} from '@react-native-firebase/auth';
 
 const TrackingScreen = () => {
+  const [currentStep, setCurrentStep] = useState(0);
+  const [doneSteps, setDoneSteps] = useState(false);
+
   const [region, setRegion] = useState({
     latitude: 12.240817,
     longitude: 109.196284,
-    latitudeDelta: 0.06,
-    longitudeDelta: 0.01,
+    latitudeDelta: 0.04,
+    longitudeDelta: 0.04,
   });
 
   const [secondMarkerCoordinate, setSecondMarkerCoordinate] = useState({
     latitude: 12.240817,
     longitude: 109.196284,
+    // latitudeDelta: 0.06,
+    // longitudeDelta: 0.06,
   });
 
   const [routeSegments, setRouteSegments] = useState([]);
@@ -22,7 +40,40 @@ const TrackingScreen = () => {
   const [movingIconCoordinate, setMovingIconCoordinate] = useState({
     latitude: 12.240817,
     longitude: 109.196284,
+    // latitudeDelta: 0.06,
+    // longitudeDelta: 0.06,
   });
+
+  const labels = [
+    'Đang kiểm tra',
+    'Đã xác nhận',
+    'Đang giao hàng',
+    'Đã nhận hàng',
+  ];
+
+  const customStyles = {
+    stepIndicatorSize: 25,
+    currentStepIndicatorSize: 30,
+    separatorStrokeWidth: 2,
+    currentStepStrokeWidth: 3,
+    stepStrokeCurrentColor: colors.mainColor,
+    stepStrokeWidth: 3,
+    stepStrokeFinishedColor: colors.mainColor,
+    stepStrokeUnFinishedColor: '#aaaaaa',
+    separatorFinishedColor: colors.mainColor,
+    separatorUnFinishedColor: '#aaaaaa',
+    stepIndicatorFinishedColor: colors.mainColor,
+    stepIndicatorUnFinishedColor: '#ffffff',
+    stepIndicatorCurrentColor: '#ffffff',
+    stepIndicatorLabelFontSize: 10,
+    currentStepIndicatorLabelFontSize: 10,
+    stepIndicatorLabelCurrentColor: colors.mainColor,
+    stepIndicatorLabelFinishedColor: '#ffffff',
+    stepIndicatorLabelUnFinishedColor: '#aaaaaa',
+    labelColor: '#666666',
+    labelSize: 12,
+    currentStepLabelColor: colors.mainColor,
+  };
 
   useEffect(() => {
     const jsonData = {
@@ -362,27 +413,40 @@ const TrackingScreen = () => {
       });
     });
 
+    const totalSteps = routeSegments.length;
+
     const intervalId = setInterval(() => {
       const progress = updateCount / totalUpdates;
+
+      const currentStepIndex = Math.floor(progress * totalSteps);
+      setCurrentStep(currentStepIndex);
 
       const nextIndex = Math.floor(progress * coordinates.length);
       const nextCoordinate = coordinates[nextIndex];
 
       setMovingIconCoordinate(nextCoordinate);
+    setCurrentStep(2);
 
       updateCount++;
 
       if (updateCount >= totalUpdates) {
         clearInterval(intervalId);
-        setTimeout(() => {}, 5000);
+        setTimeout(() => {
+          setDoneSteps(true);
+          setCurrentStep(4);
+        }, 5000);
       }
     }, 1000 / updatesPerSecond);
 
     return () => clearInterval(intervalId);
   }, [routeSegments]);
 
+  //fetch TblBills, check field "status", if true then active step 2
+  
+
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <MapView
         style={styles.map}
         region={region}
@@ -397,6 +461,7 @@ const TrackingScreen = () => {
             strokeColor="orange"
           />
         ))}
+
         <Marker
           coordinate={{
             latitude: region.latitude,
@@ -406,17 +471,18 @@ const TrackingScreen = () => {
         <Marker coordinate={secondMarkerCoordinate}>
           <View
             style={{
-              width: 30,
-              height: 30,
+              // width: 30,
+              // height: 30,
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: 'pink',
+              borderRadius: 50,
             }}>
             <Image
               source={require('../assets/images/tch.png')}
               style={{
-                width: 30,
-                height: 30,
+                width: 25,
+                height: 25,
+                borderRadius: 50,
               }}
               resizeMode="contain"
             />
@@ -427,7 +493,33 @@ const TrackingScreen = () => {
           <Biker />
         </Marker>
       </MapView>
-    </View>
+
+      <View
+        style={{
+          position: 'absolute',
+          width: windowWidth,
+          height: 150,
+          justifyContent: 'flex-end',
+          paddingVertical: 10,
+          backgroundColor: colors.white,
+        }}>
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: 'bold',
+            marginBottom: 10,
+            textAlign: 'center',
+          }}>
+          Thông tin đơn hàng
+        </Text>
+        <StepIndicator
+          customStyles={customStyles}
+          currentPosition={currentStep}
+          labels={labels}
+          stepCount={4}
+        />
+      </View>
+    </ScrollView>
   );
 };
 

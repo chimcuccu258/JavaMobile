@@ -36,6 +36,7 @@
     "react-native-screens": "^3.27.0",
     "react-native-share": "^10.0.1",
     "react-native-shared-element": "^0.8.9",
+    "react-native-step-indicator": "^1.0.3",
     "react-native-svg": "^14.0.0",
     "react-native-vector-icons": "^10.0.2",
     "react-native-virtualized-view": "^1.0.0"

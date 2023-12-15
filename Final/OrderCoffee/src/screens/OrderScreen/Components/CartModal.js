@@ -15,7 +15,8 @@ import formatPrice from '../../../utils/formatPrice';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import firestore from '@react-native-firebase/firestore';
-import {firebase} from '@react-native-firebase/auth';
+import { firebase } from '@react-native-firebase/auth';
+import LottieView from 'lottie-react-native';
 
 const CartModal = props => {
   const {quantities, menus, images, userData, onDelete} = props;
@@ -149,11 +150,25 @@ const CartModal = props => {
           {Object.keys(quantities).map(title => (
             <View key={title} style={styles.cartItem}>
               <View>
-                <View style={{flexDirection: 'row'}}>
-                  <MaterialIcons
+                <View style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                }}>
+                  {/* <MaterialIcons
                     name="coffee"
                     size={20}
                     color={colors.mainColor}
+                  /> */}
+                  <LottieView
+                    // source={require('../../assets/animations/christmas.json')}
+                    source={require('../../../assets/animations/hotCup.json')}
+                    style={{
+                      width: 30,
+                      height: 30,
+                    }}
+                    autoPlay
+                    loop
+                    withTiming
                   />
                   <Text
                     style={{fontSize: 14, fontWeight: '600', marginLeft: 5}}>
@@ -284,6 +299,7 @@ const CartModal = props => {
                   totalQuantity,
                   totalBill,
                   createdAt: firestore.FieldValue.serverTimestamp(),
+                  status: false,
                 })
                 .then(() => {
                   props.closeModal();

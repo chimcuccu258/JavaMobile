@@ -6114,6 +6114,11 @@ react-native-shared-element@^0.8.9:
   resolved "https://registry.npmjs.org/react-native-shared-element/-/react-native-shared-element-0.8.9.tgz"
   integrity sha512-vlzhv3amkJm+8gA0WSeLzcCKNtN/ypZbic3IZ4Bwwr6GeWDrYzZ6k7PdHCioy7fwIVOJ1X9Pi/aYF9HK4Kb0qg==
 
+react-native-step-indicator@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/react-native-step-indicator/-/react-native-step-indicator-1.0.3.tgz"
+  integrity sha512-WwTb6lpJl0T7MV59sus1utoEQuqbuWHq6V0R0iDWmlPRFjM0qirhTNTS5on1+V9Qmc9dsUCT380/mRgDF+U6zw==
+
 react-native-svg@^14.0.0:
   version "14.0.0"
   resolved "https://registry.npmjs.org/react-native-svg/-/react-native-svg-14.0.0.tgz"

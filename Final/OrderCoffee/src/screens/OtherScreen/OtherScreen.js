@@ -80,7 +80,10 @@ const OtherScreen = () => {
       <View>
         <Text style={styles.title}>Tiện ích</Text>
         <View style={styles.rowBtn}>
-          <TouchableOpacity style={styles.btn} activeOpacity={0.5}>
+          <TouchableOpacity
+            style={styles.btn}
+            activeOpacity={0.5}
+            onPress={() => navigation.navigate('HistoryOrder')}>
             <View style={styles.textGroup}>
               <MaterialCommunityIcons
                 name="order-bool-descending-variant"

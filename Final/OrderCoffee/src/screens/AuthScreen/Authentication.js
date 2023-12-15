@@ -45,7 +45,7 @@ const Authentication = ({route, navigation}) => {
           if (!querySnapshot.empty) {
             navigation.navigate('TabControl', {phone: phoneNumber});
           } else {
-            navigation.navigate('IndexScreen', {phone: phoneNumber});
+            navigation.navigate('SignUp', {phone: phoneNumber});
           }
         } catch (error) {
           console.error('Error checking phone number:', error);

@@ -19,6 +19,7 @@ import UserDetails from '../screens/OtherScreen/Components/UserDetails';
 import Setting from '../screens/OtherScreen/Components/Setting';
 import SignUp from '../screens/AuthScreen/SignUp';
 import TrackingScreen from '../screens/TrackingScreen';
+import HistoryOrder from '../screens/OtherScreen/Components/HistoryOrder';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -187,6 +188,14 @@ const MainNavigation = () => {
           headerShown: false,
         }}
         component={Setting}
+      />
+
+      <Stack.Screen
+        name="HistoryOrder"
+        options={{
+          headerShown: false,
+        }}
+        component={HistoryOrder}
       />
     </Stack.Navigator>
   );

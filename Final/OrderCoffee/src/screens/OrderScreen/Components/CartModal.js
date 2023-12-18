@@ -300,6 +300,7 @@ const CartModal = props => {
                   totalBill,
                   createdAt: firestore.FieldValue.serverTimestamp(),
                   status: false,
+                  done: false
                 })
                 .then(() => {
                   props.closeModal();

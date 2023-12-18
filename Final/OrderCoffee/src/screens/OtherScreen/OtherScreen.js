@@ -146,11 +146,6 @@ const OtherScreen = () => {
               <Text style={{fontSize: 14, marginLeft: 10}}>Đăng xuất</Text>
             </View>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-            <Text style={{fontSize: 14, marginLeft: 10, color: 'red'}}>
-              đăng ký
-            </Text>
-          </TouchableOpacity>
         </View>
       </View>
     </View>

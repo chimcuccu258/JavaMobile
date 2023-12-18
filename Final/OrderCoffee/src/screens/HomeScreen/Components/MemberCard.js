@@ -27,7 +27,7 @@ const MemberCard = ({userData}) => {
             <Text style={styles.memberName}>{userData.firstName} </Text>
             <Text style={styles.memberName}>{userData.lastName}</Text>
           </View>
-          <Text style={styles.memberRank}>Ranking</Text>
+          {/* <Text style={styles.memberRank}>Ranking</Text> */}
         </View>
         <View style={styles.memberCode}>
           <Text>Point</Text>
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
   },
   memberName: {
-    fontSize: 15,
+    fontSize: 18,
     fontWeight: '600',
     color: 'white',
   },

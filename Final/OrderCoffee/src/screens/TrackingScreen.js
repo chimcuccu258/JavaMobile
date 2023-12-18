@@ -20,6 +20,7 @@ import {firebase} from '@react-native-firebase/auth';
 const TrackingScreen = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [doneSteps, setDoneSteps] = useState(false);
+  const [billStatus, setBillStatus] = useState(false);
 
   const [region, setRegion] = useState({
     latitude: 12.240817,
@@ -31,8 +32,6 @@ const TrackingScreen = () => {
   const [secondMarkerCoordinate, setSecondMarkerCoordinate] = useState({
     latitude: 12.240817,
     longitude: 109.196284,
-    // latitudeDelta: 0.06,
-    // longitudeDelta: 0.06,
   });
 
   const [routeSegments, setRouteSegments] = useState([]);
@@ -40,8 +39,6 @@ const TrackingScreen = () => {
   const [movingIconCoordinate, setMovingIconCoordinate] = useState({
     latitude: 12.240817,
     longitude: 109.196284,
-    // latitudeDelta: 0.06,
-    // longitudeDelta: 0.06,
   });
 
   const labels = [
@@ -425,7 +422,6 @@ const TrackingScreen = () => {
       const nextCoordinate = coordinates[nextIndex];
 
       setMovingIconCoordinate(nextCoordinate);
-    setCurrentStep(2);
 
       updateCount++;
 
@@ -441,9 +437,23 @@ const TrackingScreen = () => {
     return () => clearInterval(intervalId);
   }, [routeSegments]);
 
-  //fetch TblBills, check field "status", if true then active step 2
-  
+  useEffect(() => {
+    const unsubscribe = firestore()
+      .collection('TblBills')
+      .where('userId', '==', firebase.auth().currentUser.uid)
+      .orderBy('createdAt', 'desc')
+      .limit(1)
+      .onSnapshot(snapshot => {
+        const latestBill = snapshot.docs[0]?.data();
 
+        if (latestBill) {
+          setBillStatus(latestBill.status);
+          setCurrentStep(latestBill.done ? 3 : latestBill.status ? 2 : 1);
+        }
+      });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -471,8 +481,6 @@ const TrackingScreen = () => {
         <Marker coordinate={secondMarkerCoordinate}>
           <View
             style={{
-              // width: 30,
-              // height: 30,
               justifyContent: 'center',
               alignItems: 'center',
               borderRadius: 50,

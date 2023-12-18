@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {
   View,
   Text,
-  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
@@ -11,9 +10,9 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {windowHeight, windowWidth} from '../../utils/dimession';
-import { colors } from '../../assets/colors';
+import {colors} from '../../assets/colors';
 import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 const SignUp = ({route}) => {
   const navigation = useNavigation();
@@ -23,11 +22,12 @@ const SignUp = ({route}) => {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
-  const [dob, setDob] = useState('');
+  const [dob, setDob] = useState(new Date());
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const handleSignUp = async () => {
     try {
-      if (!firstName || !lastName || !email || !gender || !address || !dob) {
+      if (!firstName || !lastName || !email || !gender || !address) {
         console.error('Please fill in all required fields');
         return;
       }
@@ -39,7 +39,7 @@ const SignUp = ({route}) => {
         email,
         phone,
         address,
-        dob,
+        dob: formatDate(dob),
         createdAt: firestore.FieldValue.serverTimestamp(),
         updatedAt: firestore.FieldValue.serverTimestamp(),
       };
@@ -53,6 +53,30 @@ const SignUp = ({route}) => {
       console.error('Error during sign up:', error);
     }
   };
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = selectedDate => {
+    hideDatePicker();
+    setDob(selectedDate || dob);
+  };
+
+const formatDate = date => {
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  return `${day < 10 ? '0' : ''}${day}/${
+    month < 10 ? '0' : ''
+  }${month}/${year}`;
+};
+
 
   return (
     <View style={styles.container}>
@@ -97,11 +121,17 @@ const SignUp = ({route}) => {
             value={address}
             onChangeText={text => setAddress(text)}
           />
-          <TextInput
-            style={styles.inputField}
-            placeholder="Ngày sinh"
-            value={dob}
-            onChangeText={text => setDob(text)}
+          <View style={styles.datePickerContainer}>
+            <Text style={styles.datePickerLabel}>Ngày sinh:</Text>
+            <TouchableOpacity onPress={showDatePicker}>
+              <Text>{formatDate(dob)}</Text>
+            </TouchableOpacity>
+          </View>
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
           />
           <View style={styles.radioContainer}>
             <Text style={styles.radioLabel}>Giới tính:</Text>
@@ -225,5 +255,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
+  },
+  datePickerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  datePickerLabel: {
+    fontSize: 16,
+    marginRight: 10,
   },
 });

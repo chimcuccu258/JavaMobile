@@ -67,16 +67,15 @@ const SignUp = ({route}) => {
     setDob(selectedDate || dob);
   };
 
-const formatDate = date => {
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
+  const formatDate = date => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
 
-  return `${day < 10 ? '0' : ''}${day}/${
-    month < 10 ? '0' : ''
-  }${month}/${year}`;
-};
-
+    return `${day < 10 ? '0' : ''}${day}/${
+      month < 10 ? '0' : ''
+    }${month}/${year}`;
+  };
 
   return (
     <View style={styles.container}>

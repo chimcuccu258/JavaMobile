@@ -21,6 +21,9 @@ const TrackingScreen = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [doneSteps, setDoneSteps] = useState(false);
   const [billStatus, setBillStatus] = useState(false);
+  const [noOrders, setNoOrders] = useState(false);
+  const [showConfirmationButton, setShowConfirmationButton] = useState(false);
+  const [currentPositionIndex, setCurrentPositionIndex] = useState(0);
 
   const [region, setRegion] = useState({
     latitude: 12.240817,
@@ -395,11 +398,6 @@ const TrackingScreen = () => {
   }, []);
 
   useEffect(() => {
-    const totalTimeInSeconds = 30;
-    const updatesPerSecond = 1;
-    const totalUpdates = totalTimeInSeconds * updatesPerSecond;
-    let updateCount = 0;
-
     const coordinates = [];
     routeSegments.forEach(segment => {
       segment.forEach(coord => {
@@ -410,31 +408,8 @@ const TrackingScreen = () => {
       });
     });
 
-    const totalSteps = routeSegments.length;
-
-    const intervalId = setInterval(() => {
-      const progress = updateCount / totalUpdates;
-
-      const currentStepIndex = Math.floor(progress * totalSteps);
-      setCurrentStep(currentStepIndex);
-
-      const nextIndex = Math.floor(progress * coordinates.length);
-      const nextCoordinate = coordinates[nextIndex];
-
-      setMovingIconCoordinate(nextCoordinate);
-
-      updateCount++;
-
-      if (updateCount >= totalUpdates) {
-        clearInterval(intervalId);
-        setTimeout(() => {
-          setDoneSteps(true);
-          setCurrentStep(4);
-        }, 5000);
-      }
-    }, 1000 / updatesPerSecond);
-
-    return () => clearInterval(intervalId);
+    const initialCoordinate = coordinates[0];
+    setMovingIconCoordinate(initialCoordinate);
   }, [routeSegments]);
 
   useEffect(() => {
@@ -447,8 +422,22 @@ const TrackingScreen = () => {
         const latestBill = snapshot.docs[0]?.data();
 
         if (latestBill) {
+          setNoOrders(false);
           setBillStatus(latestBill.status);
-          setCurrentStep(latestBill.done ? 3 : latestBill.status ? 2 : 1);
+
+          if (latestBill.status) {
+            setCurrentStep(latestBill.done ? 2 : 1);
+
+            if (!latestBill.done) {
+              setTimeout(() => {
+                setCurrentStep(2);
+              }, 5000);
+            }
+          } else {
+            setCurrentStep(latestBill.done ? 3 : 0);
+          }
+        } else {
+          setNoOrders(true);
         }
       });
 
@@ -457,76 +446,90 @@ const TrackingScreen = () => {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <MapView
-        style={styles.map}
-        region={region}
-        showsUserLocation={true}
-        zoomControlEnabled={true}
-        mapType="satellite">
-        {routeSegments.map((segment, index) => (
-          <Polyline
-            key={index}
-            coordinates={segment}
-            strokeWidth={3}
-            strokeColor="orange"
-          />
-        ))}
+      {noOrders ? (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: windowHeight * 0.8,
+          }}>
+          <Text style={{fontSize: 16}}>Bạn chưa có đơn hàng nào</Text>
+        </View>
+      ) : (
+        <>
+          <MapView
+            style={styles.map}
+            region={region}
+            showsUserLocation={true}
+            zoomControlEnabled={true}
+            mapType="satellite">
+            {routeSegments.map((segment, index) => (
+              <Polyline
+                key={index}
+                coordinates={segment}
+                strokeWidth={3}
+                strokeColor="orange"
+              />
+            ))}
 
-        <Marker
-          coordinate={{
-            latitude: region.latitude,
-            longitude: region.longitude,
-          }}
-        />
-        <Marker coordinate={secondMarkerCoordinate}>
+            <Marker
+              coordinate={{
+                latitude: region.latitude,
+                longitude: region.longitude,
+              }}
+            />
+            <Marker coordinate={secondMarkerCoordinate}>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  borderRadius: 50,
+                }}>
+                <Image
+                  source={require('../assets/images/tch.png')}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    borderRadius: 50,
+                  }}
+                  resizeMode="contain"
+                />
+              </View>
+            </Marker>
+
+            <Marker coordinate={movingIconCoordinate}>
+              <Biker />
+            </Marker>
+          </MapView>
+
           <View
             style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: 50,
+              position: 'absolute',
+              width: windowWidth,
+              height: 150,
+              justifyContent: 'flex-end',
+              paddingVertical: 10,
+              backgroundColor: colors.white,
             }}>
-            <Image
-              source={require('../assets/images/tch.png')}
+            <Text
               style={{
-                width: 25,
-                height: 25,
-                borderRadius: 50,
-              }}
-              resizeMode="contain"
+                fontSize: 16,
+                fontWeight: 'bold',
+                marginBottom: 10,
+                textAlign: 'center',
+              }}>
+              Thông tin đơn hàng
+            </Text>
+            <StepIndicator
+              customStyles={customStyles}
+              currentPosition={currentStep}
+              labels={labels}
+              stepCount={4}
             />
           </View>
-        </Marker>
-
-        <Marker coordinate={movingIconCoordinate}>
-          <Biker />
-        </Marker>
-      </MapView>
-
-      <View
-        style={{
-          position: 'absolute',
-          width: windowWidth,
-          height: 150,
-          justifyContent: 'flex-end',
-          paddingVertical: 10,
-          backgroundColor: colors.white,
-        }}>
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: 'bold',
-            marginBottom: 10,
-            textAlign: 'center',
-          }}>
-          Thông tin đơn hàng
-        </Text>
-        <StepIndicator
-          customStyles={customStyles}
-          currentPosition={currentStep}
-          labels={labels}
-          stepCount={4}
-        />
-      </View>
+        </>
+      )}
     </ScrollView>
   );
 };

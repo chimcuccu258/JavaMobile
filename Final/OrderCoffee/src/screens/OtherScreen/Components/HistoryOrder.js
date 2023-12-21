@@ -5,11 +5,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import { formatDateTime } from '../../../utils/formatDate';
+import {formatDateTime} from '../../../utils/formatDate';
 import formatPrice from '../../../utils/formatPrice';
 import Receipt from '../../../assets/svg/Receipt';
 import LottieView from 'lottie-react-native';
-import { windowHeight, windowWidth } from '../../../utils/dimession';
+import {windowHeight, windowWidth} from '../../../utils/dimession';
 
 const HistoryOrder = () => {
   const navigation = useNavigation();
@@ -22,20 +22,13 @@ const HistoryOrder = () => {
     if (user) {
       firestore()
         .collection('TblBills')
-        .where('userId', '==', user.uid)
-        .orderBy('createdAt', 'desc')
-        .get()
-        .then(querySnapshot => {
+        .onSnapshot(querySnapshot => {
           const orderData = [];
           querySnapshot.forEach(doc => {
             const data = doc.data();
             orderData.push(data);
           });
           setOrders(orderData);
-          setLoading(false);
-        })
-        .catch(error => {
-          console.log(error);
           setLoading(false);
         });
     } else {
@@ -48,11 +41,13 @@ const HistoryOrder = () => {
       <View
         style={{
           width: '70%',
-          flexDirection: 'row', 
-          justifyContent: 'space-around'
+          flexDirection: 'row',
         }}>
         <Receipt />
-        <View>
+        <View
+          style={{
+            marginLeft: 10,
+          }}>
           <Text
             style={[
               styles.billText,
@@ -63,7 +58,8 @@ const HistoryOrder = () => {
             ]}>
             {item.items.map(orderItem => orderItem.title).join(', ')}
           </Text>
-          <Text style={styles.billText}>Trạng thái:
+          <Text style={styles.billText}>
+            Trạng thái:
             {item.status ? ' Đã giao' : ' Chưa giao'}
           </Text>
           <Text style={styles.billText}>{formatDateTime(item.createdAt)}</Text>
@@ -135,7 +131,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     padding: 10,
-    // backgroundColor: 'pink',
+    marginHorizontal: 20,
   },
   headerTitle: {
     width: '100%',
@@ -145,7 +141,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
     flexDirection: 'row',
-    // justifyContent: 'center'
   },
   billText: {
     fontSize: 13,

@@ -60,7 +60,7 @@ const HistoryOrder = () => {
           </Text>
           <Text style={styles.billText}>
             Trạng thái:
-            {item.status ? ' Đã giao' : ' Chưa giao'}
+            {item.done ? ' Đã giao' : ' Chưa giao'}
           </Text>
           <Text style={styles.billText}>{formatDateTime(item.createdAt)}</Text>
         </View>
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     padding: 10,
-    marginHorizontal: 20,
+    marginHorizontal: 10,
   },
   headerTitle: {
     width: '100%',

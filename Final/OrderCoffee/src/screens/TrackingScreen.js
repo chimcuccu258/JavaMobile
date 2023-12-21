@@ -6,6 +6,8 @@ import {
   Image,
   Text,
   ScrollView,
+  Animated,
+  TouchableOpacity,
 } from 'react-native';
 import MapView, {Marker, Polyline} from 'react-native-maps';
 import Geolocation from '@react-native-community/geolocation';
@@ -22,8 +24,12 @@ const TrackingScreen = () => {
   const [doneSteps, setDoneSteps] = useState(false);
   const [billStatus, setBillStatus] = useState(false);
   const [noOrders, setNoOrders] = useState(false);
-  const [showConfirmationButton, setShowConfirmationButton] = useState(false);
   const [currentPositionIndex, setCurrentPositionIndex] = useState(0);
+  const [destinationReached, setDestinationReached] = useState(false);
+  const [showConfirmationButton, setShowConfirmationButton] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
+
+  const movingIconPosition = new Animated.Value(0);
 
   const [region, setRegion] = useState({
     latitude: 12.240817,
@@ -410,7 +416,50 @@ const TrackingScreen = () => {
 
     const initialCoordinate = coordinates[0];
     setMovingIconCoordinate(initialCoordinate);
+
+    animateBikerMovement(coordinates);
   }, [routeSegments]);
+
+  const animateBikerMovement = coordinates => {
+    if (coordinates.length < 2) {
+      return;
+    }
+
+    const durationPerSegment = 100;
+    const steps = coordinates.length - 1;
+
+    Animated.timing(movingIconPosition, {
+      toValue: steps,
+      duration: durationPerSegment * steps,
+      useNativeDriver: false,
+    }).start();
+
+    movingIconPosition.addListener(({value}) => {
+      const index = Math.floor(value);
+
+      if (coordinates[index] && coordinates[index + 1]) {
+        const fraction = value - index < steps ? value - index : steps - index;
+
+        const nextCoord = {
+          latitude:
+            coordinates[index].latitude +
+            fraction *
+              (coordinates[index + 1].latitude - coordinates[index].latitude),
+          longitude:
+            coordinates[index].longitude +
+            fraction *
+              (coordinates[index + 1].longitude - coordinates[index].longitude),
+        };
+
+        setMovingIconCoordinate(nextCoord);
+
+        if (index === steps - 1) {
+          setDestinationReached(true);
+          setShowConfirmationButton(true);
+        }
+      }
+    });
+  };
 
   useEffect(() => {
     const unsubscribe = firestore()
@@ -426,13 +475,7 @@ const TrackingScreen = () => {
           setBillStatus(latestBill.status);
 
           if (latestBill.status) {
-            setCurrentStep(latestBill.done ? 2 : 1);
-
-            if (!latestBill.done) {
-              setTimeout(() => {
-                setCurrentStep(2);
-              }, 5000);
-            }
+            setCurrentStep(latestBill.done ? 3 : 2);
           } else {
             setCurrentStep(latestBill.done ? 3 : 0);
           }
@@ -443,6 +486,32 @@ const TrackingScreen = () => {
 
     return () => unsubscribe();
   }, []);
+
+  const resetTrackingScreen = () => {
+    setCurrentStep(0);
+    setDoneSteps(false);
+    setBillStatus(false);
+    setNoOrders(false);
+    setCurrentPositionIndex(0);
+    setDestinationReached(false);
+    setShowConfirmationButton(false);
+    setConfirmed(false);
+    setMovingIconCoordinate({
+      latitude: 12.240817,
+      longitude: 109.196284,
+    });
+    setRegion({
+      latitude: 12.240817,
+      longitude: 109.196284,
+      latitudeDelta: 0.04,
+      longitudeDelta: 0.04,
+    });
+    setSecondMarkerCoordinate({
+      latitude: 12.240817,
+      longitude: 109.196284,
+    });
+    setRouteSegments([]);
+  };
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -506,14 +575,16 @@ const TrackingScreen = () => {
           <View
             style={{
               position: 'absolute',
+
               width: windowWidth,
-              height: 150,
+              // height: 300,
               justifyContent: 'flex-end',
               paddingVertical: 10,
               backgroundColor: colors.white,
             }}>
             <Text
               style={{
+                marginTop: windowHeight * 0.06,
                 fontSize: 16,
                 fontWeight: 'bold',
                 marginBottom: 10,
@@ -521,12 +592,55 @@ const TrackingScreen = () => {
               }}>
               Thông tin đơn hàng
             </Text>
+
             <StepIndicator
               customStyles={customStyles}
-              currentPosition={currentStep}
+              currentPosition={confirmed ? 3 : currentStep}
               labels={labels}
               stepCount={4}
             />
+
+            {destinationReached && showConfirmationButton && (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: confirmed ? '#aaaaaa' : colors.mainColor,
+                  paddingVertical: 10,
+                  borderRadius: 50,
+                  padding: 5,
+                  marginVertical: 10,
+                  width: windowWidth * 0.5,
+                  alignSelf: 'center',
+                }}
+                onPress={() => {
+                  // setConfirmed(true);
+                  if (!confirmed) {
+                    // Update the "done" field in the Firestore collection
+                    firestore()
+                      .collection('TblBills')
+                      .where('userId', '==', firebase.auth().currentUser.uid)
+                      .orderBy('createdAt', 'desc')
+                      .limit(1)
+                      .get()
+                      .then(querySnapshot => {
+                        const latestBill = querySnapshot.docs[0];
+                        if (latestBill) {
+                          latestBill.ref.update({done: true});
+                        }
+                      })
+                      .catch(error => {
+                        console.error('Error updating "done" field:', error);
+                      });
+
+                    setConfirmed(true);
+                    setNoOrders(true);
+                  }
+                }}
+                disabled={confirmed}>
+                <Text style={{color: 'white', textAlign: 'center'}}>
+                  {confirmed ? 'Đã xác nhận' : 'Xác nhận đã nhận hàng'}
+                </Text>
+              </TouchableOpacity>
+            )}
           </View>
         </>
       )}

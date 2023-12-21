@@ -77,7 +77,7 @@ const ProductList = ({menus, images, onProductPress, onPlusIconPress}) => {
                 onPress={() => onPlusIconPress(item, index)}>
                 <AntDesign
                   name="pluscircle"
-                  size={26}
+                  size={30}
                   color={colors.mainColor}
                 />
               </TouchableOpacity>

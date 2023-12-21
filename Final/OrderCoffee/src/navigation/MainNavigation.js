@@ -115,7 +115,7 @@ const MainNavigation = () => {
 
   return (
     <Stack.Navigator
-      initialRouteName={showOnboarding ? 'Onboarding' : 'TabControl'}>
+      initialRouteName={showOnboarding ? 'TabControl' : 'TabControl'}>
       {showOnboarding && (
         <>
           <Stack.Screen

@@ -21,7 +21,7 @@ import {firebase} from '@react-native-firebase/auth';
 
 const TrackingScreen = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const [doneSteps, setDoneSteps] = useState(false);
+  // const [doneSteps, setDoneSteps] = useState(false);
   const [billStatus, setBillStatus] = useState(false);
   const [noOrders, setNoOrders] = useState(false);
   const [currentPositionIndex, setCurrentPositionIndex] = useState(0);
@@ -479,6 +479,7 @@ const TrackingScreen = () => {
           } else {
             setCurrentStep(latestBill.done ? 3 : 0);
           }
+          
         } else {
           setNoOrders(true);
         }
@@ -489,9 +490,9 @@ const TrackingScreen = () => {
 
   const resetTrackingScreen = () => {
     setCurrentStep(0);
-    setDoneSteps(false);
+    // setDoneSteps(false);
     setBillStatus(false);
-    setNoOrders(false);
+    setNoOrders(true);
     setCurrentPositionIndex(0);
     setDestinationReached(false);
     setShowConfirmationButton(false);
@@ -575,9 +576,7 @@ const TrackingScreen = () => {
           <View
             style={{
               position: 'absolute',
-
               width: windowWidth,
-              // height: 300,
               justifyContent: 'flex-end',
               paddingVertical: 10,
               backgroundColor: colors.white,
@@ -612,9 +611,7 @@ const TrackingScreen = () => {
                   alignSelf: 'center',
                 }}
                 onPress={() => {
-                  // setConfirmed(true);
                   if (!confirmed) {
-                    // Update the "done" field in the Firestore collection
                     firestore()
                       .collection('TblBills')
                       .where('userId', '==', firebase.auth().currentUser.uid)

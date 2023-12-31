@@ -254,7 +254,7 @@ const OrderScreen = () => {
           </View>
         ) : (
           <>
-            <MenuList menus={menus} />
+            <MenuList menus={menus}  />
             <ProductList
               menus={menus}
               images={images}
